@@ -98,9 +98,45 @@ jobs:
         with:
           path: artifacts
 
+      - name: Read version from the tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # Written out rather than auto-generated: a visitor needs to know which
+      # file to download, which a list of commits does not tell them. Also
+      # avoids the notes being appended twice if the tag is ever moved.
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
-          generate_release_notes: true
           fail_on_unmatched_files: true
+          body: |
+            ## Download
+
+            **Windows**. Download one file and run it:
+
+            **[BBSpecs-${{ steps.version.outputs.version }}-win-x64.exe](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/BBSpecs-${{ steps.version.outputs.version }}-win-x64.exe)**
+
+            That is everything. Double-click it and accept the Windows prompt.
+            The .NET runtime, the interface, the font and the temperature driver
+            are all inside that one file. Windows asks for Administrator because
+            it only lets elevated programs read temperature sensors.
+
+            **Linux**. Download `BBSpecs-${{ steps.version.outputs.version }}-linux-x64`.
+            For a menu entry, put `install.sh`, `bbspecs.desktop` and
+            `bbspecs.png` beside it and run `./install.sh`.
+
+            ```bash
+            chmod +x BBSpecs-${{ steps.version.outputs.version }}-linux-x64
+            ./BBSpecs-${{ steps.version.outputs.version }}-linux-x64
+            ```
+
+            Linux needs a system webview, which most desktops already have:
+            `libwebkit2gtk-4.1-0` on Debian and Ubuntu, `webkit2gtk4.1` on
+            Fedora, `webkit2gtk-4.1` on Arch.
+
+            **Source code (zip)** and **(tar.gz)** are added by GitHub
+            automatically and are not needed to run BBSpecs.
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+            for what changed.
