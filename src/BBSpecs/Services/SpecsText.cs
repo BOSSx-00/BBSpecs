@@ -5,7 +5,7 @@ using DriveInfo = BBSpecs.Models.DriveInfo;
 namespace BBSpecs.Services;
 
 /// <summary>
-/// The plain-text summary behind the Copy Specs button — the thing you paste into
+/// The plain-text summary behind the Copy Specs button: the thing you paste into
 /// a forum post, a support chat, or a message to whoever you ask for PC help.
 /// Deliberately short and free of serial numbers, addresses and anything else
 /// that shouldn't be pasted into a public thread.
@@ -80,7 +80,7 @@ public static class SpecsText
         {
             string size = d.SizeGb >= 1024 ? $"{d.SizeGb / 1024:0.#} TB" : $"{d.SizeGb:0} GB";
             string tag = d.IsSystemDrive ? ", Windows drive" : "";
-            return $"{d.Model} — {size} {d.Kind}{tag}";
+            return $"{d.Model}: {size} {d.Kind}{tag}";
         });
 
         // One per line, indented, so a four-drive machine still reads cleanly.

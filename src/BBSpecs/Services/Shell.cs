@@ -8,7 +8,7 @@ namespace BBSpecs.Services;
 /// The Linux readings lean on a handful of standard utilities (nvidia-smi,
 /// dmidecode, iw, nmcli, smartctl). None of them are guaranteed to be installed,
 /// so a missing binary has to be an ordinary "no data" answer rather than a
-/// crash — every call here returns null instead of throwing.
+/// crash: every call here returns null instead of throwing.
 /// </summary>
 public static class Shell
 {

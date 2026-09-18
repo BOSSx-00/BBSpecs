@@ -8,7 +8,7 @@
     says exactly why the kernel driver did or didn't load, which beats guessing
     from the outside.
 
-    Also lists other software that takes exclusive low-level hardware access —
+    Also lists other software that takes exclusive low-level hardware access:
     motherboard vendor suites are the usual reason a sensor driver can't start.
 
 .EXAMPLE
@@ -53,7 +53,7 @@ if (-not $elevated) {
         Write-Host ""
         Write-Host "Report saved to: $Output" -ForegroundColor Green
     } else {
-        Write-Host "No report was produced — the elevation prompt was probably declined." -ForegroundColor Yellow
+        Write-Host "No report was produced: the elevation prompt was probably declined." -ForegroundColor Yellow
     }
     return
 }
@@ -117,4 +117,4 @@ $lines | Set-Content -Path $Output -Encoding utf8
 & $exe --report *>> $Output
 
 Write-Host "Report written to $Output" -ForegroundColor Green
-Write-Host "Look for the 'Ring0' section — it says why the driver did or didn't load."
+Write-Host "Look for the 'Ring0' section: it says why the driver did or didn't load."

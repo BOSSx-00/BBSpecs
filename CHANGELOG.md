@@ -3,7 +3,7 @@
 Every fix and feature bumps the version, which shows in the window title next to
 the logo: `BBSpecs  -  v<version>`.
 
-The version lives in one place — `<Version>` in `src/BBSpecs/BBSpecs.csproj` — and
+The version lives in one place, `<Version>` in `src/BBSpecs/BBSpecs.csproj`, and
 the app reads it back from its own assembly at runtime.
 
 ---
@@ -18,7 +18,7 @@ the app reads it back from its own assembly at runtime.
   that reads as electrical. The small labels and the headline verdict run at
   different speeds so they drift out of phase instead of blinking in lockstep.
 
-  The letters themselves never change opacity — only the halo around them — so
+  The letters themselves never change opacity, only the halo around them, so
   the text stays fully legible the whole time, and anyone who has asked their
   system for reduced motion gets a static glow instead.
 
@@ -35,14 +35,14 @@ the app reads it back from its own assembly at runtime.
   terms, and records why PawnIO's GPL does not extend to BBSpecs.
 - **A release workflow** (`.github/workflows/release.yml`) builds both platforms
   on a tag and attaches the artifacts to a GitHub release. Building in CI from
-  public source is a prerequisite for free signing, and useful on its own — the
+  public source is a prerequisite for free signing, and useful on its own: the
   Linux build had never actually been run until now.
 
 ### Notes
 
 - Signing is the *only* way to change the "Publisher: Unknown" line on the
   Administrator prompt. Windows reads that from the signature, not from the
-  file's metadata — BBSpecs already declares `CompanyName = BOSSx`, which is why
+  file's metadata: BBSpecs already declares `CompanyName = BOSSx`, which is why
   File Properties shows it, but UAC ignores that entirely. A certificate issued
   to BOSSx is required; see the README for the options.
 
@@ -53,7 +53,7 @@ the app reads it back from its own assembly at runtime.
 ### Added
 
 - **Volumes open in your file manager.** Click any volume on the Drives tab and
-  it opens that drive — Explorer on Windows, whatever the desktop uses on Linux.
+  it opens that drive: Explorer on Windows, whatever the desktop uses on Linux.
   The box highlights on hover and shows an "Open" cue so it's clear it does
   something, and it answers the keyboard as well as the mouse.
 
@@ -72,7 +72,7 @@ the app reads it back from its own assembly at runtime.
 
 - **VPN status went stale.** Disconnecting a VPN left BBSpecs reporting it as
   still connected, indefinitely. Detection only asked "is a tunnel adapter
-  present, up, and holding an address" — and several clients, NordVPN's NordLynx
+  present, up, and holding an address", and several clients, NordVPN's NordLynx
   among them, leave exactly that behind after you disconnect. It now requires the
   tunnel to actually carry the default route, so a tunnel that has stopped
   routing anything stops being reported.
@@ -80,7 +80,7 @@ the app reads it back from its own assembly at runtime.
   it would keep showing a VPN's address after disconnecting, or your own after
   connecting. BBSpecs now watches connection type, VPN state, address and
   adapter, and re-checks when any of them change. It still makes no lookup at all
-  until you ask the first time — that opt-in is what enables the watching.
+  until you ask the first time: that opt-in is what enables the watching.
 - The public address card has a **Refresh** button.
 
 ### Changed
@@ -88,8 +88,8 @@ the app reads it back from its own assembly at runtime.
 - **Privacy starts on**, masking serial numbers, addresses and network names by
   default. Revealing them costs one click; a screenshot taken before anyone
   thought about it cannot be taken back.
-- **Stronger glow on the status text.** Three stacked shadows — a bright tight
-  core with two progressively wider, fainter halos — which is what reads as neon.
+- **Stronger glow on the status text.** Three stacked shadows, a bright tight
+  core with two progressively wider, fainter halos, which is what reads as neon.
   A single blur either smears the letters or barely registers.
 
 ---
@@ -105,12 +105,12 @@ the app reads it back from its own assembly at runtime.
 - **The health glow itself is much softer.** It was two stacked halos at full
   colour strength, which smeared the text. It's now a single tight shadow at
   38% opacity, written per tier as rgba so the alpha can actually be dialled
-  down — `currentColor` gives no way to do that.
+  down: `currentColor` gives no way to do that.
 - **Privacy is a proper button** and says what it's doing: *Privacy - Shown* or
   *Privacy - Hidden*, rather than just naming itself.
 - **The opening screen talks.** Instead of one static line it cycles short baby
-  puns every three seconds — "Warming the bottle", "Pampering the sensors",
-  "Burping the bus", "Checking the diaper drive" — shuffled per launch so two
+  puns every three seconds ("Warming the bottle", "Pampering the sensors",
+  "Burping the bus", "Checking the diaper drive"), shuffled per launch so two
   starts in a row don't read the same.
 
 ### Added
@@ -132,7 +132,7 @@ the app reads it back from its own assembly at runtime.
 ### Fixed
 
 - **A second copy of BBSpecs exited silently.** Launching it while one was
-  already open did nothing visible at all — the same "double-click and nothing
+  already open did nothing visible at all: the same "double-click and nothing
   happens" failure the webview check was added to prevent. It now brings the
   running window to the front, and says so plainly if it can't find it.
 
@@ -147,7 +147,7 @@ the app reads it back from its own assembly at runtime.
 ### Added
 
 - **BBSpecs now installs the temperature driver for you.** One button in the
-  banner, one click, done — no separate download, no instructions to follow.
+  banner, one click, done: no separate download, no instructions to follow.
 
   Windows gives no way to read processor temperature without a kernel driver:
   the instruction that reads the thermal register is privileged, which is why
@@ -157,7 +157,7 @@ the app reads it back from its own assembly at runtime.
   rather than the user's.
 
   Nothing is installed silently. The banner explains what it is and why, and
-  declining leaves the machine untouched — everything except processor and
+  declining leaves the machine untouched: everything except processor and
   motherboard temperature works without it.
 
 - After a successful install the sensor layer reopens in place, so temperatures
@@ -172,7 +172,7 @@ the app reads it back from its own assembly at runtime.
 - PawnIO is GPL v2 with a linking exception for programs that talk to it through
   its device interface, which is how BBSpecs uses it. BBSpecs' own licensing is
   unaffected.
-- The Linux build doesn't carry any of this — the kernel exposes temperatures
+- The Linux build doesn't carry any of this: the kernel exposes temperatures
   through hwmon, so there was never a dependency there.
 - Windows download grows from 37.5 MB to 40.8 MB.
 
@@ -192,7 +192,7 @@ the app reads it back from its own assembly at runtime.
   Vulnerable Driver Blocklist; PawnIO does the same job safely and isn't blocked.
 
   Without PawnIO installed, every processor temperature sensor is present and
-  every one reads null — which looks exactly like a permissions problem and isn't
+  every one reads null, which looks exactly like a permissions problem and isn't
   one. BBSpecs now detects this specifically and says so, with a button to fetch
   the driver. Graphics and drive temperatures were never affected, because those
   come from the vendor's own interface and from SMART.
@@ -213,8 +213,8 @@ the app reads it back from its own assembly at runtime.
 
 - **The "no temperatures" message blamed the wrong thing.** It asserted Core
   Isolation, which was wrong on a machine where Memory integrity was already off.
-  It now names the cause it can actually detect — other software holding the
-  hardware — and otherwise lists the real candidates without pretending to know
+  It now names the cause it can actually detect: other software holding the
+  hardware, and otherwise lists the real candidates without pretending to know
   which one it is.
 - BBSpecs now spots the common culprits by name: ASUS Armoury Crate and AI Suite,
   MSI Afterburner, Dragon Center and MSI Center, AIDA64, HWiNFO, HWMonitor,
@@ -224,7 +224,7 @@ the app reads it back from its own assembly at runtime.
 
 ### Added
 
-- **`tools/driver-report.ps1`** — asks for Administrator, then writes a full
+- **`tools/driver-report.ps1`**: asks for Administrator, then writes a full
   diagnostic to `driver-report.txt`: Memory integrity and Vulnerable Driver
   Blocklist state, Secure Boot, conflicting software, registered kernel drivers,
   recent blocked-driver events, and the sensor library's own report. The Ring0
@@ -240,7 +240,7 @@ the app reads it back from its own assembly at runtime.
 
 - **A startup check for the system webview**, the one thing BBSpecs can't carry
   inside its own executable. Previously a PC without it launched, failed inside
-  the native layer, and closed again without a word — a windowed app has no
+  the native layer, and closed again without a word: a windowed app has no
   console to complain to, so the user double-clicked and nothing happened. Now
   they get a plain-language dialog naming exactly what's missing, and on Windows
   an offer to open the Microsoft download page. On Linux it prints the install
@@ -262,7 +262,7 @@ the app reads it back from its own assembly at runtime.
 
 ### Changed
 
-- Health indicators are **glowing text on its own** — the blinking `x` marker is
+- Health indicators are **glowing text on its own**: the blinking `x` marker is
   gone. The list bullets and per-core status markers that picked it up in 0.2.0
   are back to small static glowing dots.
 - **Darker surfaces throughout.** The background drops to near-black and every
@@ -275,17 +275,17 @@ the app reads it back from its own assembly at runtime.
 
 ### Added
 
-- **Copy Specs** on the Overview — puts a short plain-text summary of the machine
+- **Copy Specs** on the Overview: puts a short plain-text summary of the machine
   on the clipboard (processor, graphics, motherboard, memory, every drive and its
   capacity, and the network hardware), ready to paste wherever you're asking for
   help. Serial numbers and addresses are deliberately left out.
-- **Upgrade ideas** on the Overview — names the cheapest part that would actually
+- **Upgrade ideas** on the Overview: names the cheapest part that would actually
   make a difference, in the order worth buying. It reads the real state of the
   machine, so it catches things like mismatched memory sticks dragging a whole
   set down to the slowest one's speed. Parts are named, never linked, and no
   prices are quoted because they go stale.
 - Missing readings now say **why** they're missing rather than showing a dial
-  stuck at zero — "Needs Administrator", "Sensor driver blocked", or "Not
+  stuck at zero: "Needs Administrator", "Sensor driver blocked", or "Not
   reported by this drive".
 - When Windows blocks the sensor driver despite Administrator rights, BBSpecs now
   names the cause (Core Isolation / Memory integrity) and how to turn it off.
@@ -301,7 +301,7 @@ the app reads it back from its own assembly at runtime.
 - **The window fills its width when resized or maximised.** Grid tracks used
   `auto-fill`, which keeps empty columns around, stranding cards at two-thirds
   width on a wide screen; they now use `auto-fit`.
-- The version appears once, in the app's own header — the window title is just
+- The version appears once, in the app's own header: the window title is just
   "BBSpecs".
 - Removed the translucent red bloom under the brand bar.
 - All-caps labels are larger and more widely spaced, because VT323's capital M
@@ -313,8 +313,8 @@ the app reads it back from its own assembly at runtime.
   background thread after its network call, and the webview can only be written
   to from the window's own thread, so the result was silently dropped. It's now
   handed over on the next poll. It also falls back across several lookup services
-  — behind a VPN the shared exit address is often already over one service's free
-  rate limit — and explains that a VPN's address is what you'll see.
+ : behind a VPN the shared exit address is often already over one service's free
+  rate limit, and explains that a VPN's address is what you'll see.
 - **Drive life percentage** is read under the several names different drives use
   for it, and handles drives that report wear used rather than life remaining.
 - A gauge at almost zero no longer leaves a floating dot from its rounded cap.
@@ -337,31 +337,31 @@ First release.
 
 ### Added
 
-- **Overview** — an at-a-glance verdict for the whole machine, scored out of 100,
+- **Overview**: an at-a-glance verdict for the whole machine, scored out of 100,
   with "what's working well" and "what's worth looking at" called out in plain
   language. Summary cards for the processor, graphics, memory, motherboard,
   internet connection and every attached drive.
-- **Processor** — model, family and rough release year, temperature, live load and
+- **Processor**: model, family and rough release year, temperature, live load and
   clock speed, physical cores versus threads, cache sizes, package power, and a
   per-core grid showing each core's temperature, speed, load and health.
-- **Graphics** — model, vendor, video memory total and in use, temperature and hot
+- **Graphics**: model, vendor, video memory total and in use, temperature and hot
   spot, core and memory clocks, fan speed, power draw, driver version (shown the way
   the vendor writes it, not the way Windows records it), PCI slot location, and the
   current display resolution and refresh rate.
-- **Drives** — every attached drive with its type, bus, capacity, temperature,
+- **Drives**: every attached drive with its type, bus, capacity, temperature,
   remaining life, lifetime data written, firmware and serial, plus each volume's
   free space.
-- **Internet** — connection type, live upload and download, Wi-Fi network with signal
+- **Internet**: connection type, live upload and download, Wi-Fi network with signal
   strength, band, channel, 802.11 generation and security, VPN detection with a
   plain-English explanation, full adapter details, and an opt-in public IP lookup.
-- **Verdicts everywhere** — every part gets rated Amazing / Good / Decent /
+- **Verdicts everywhere**: every part gets rated Amazing / Good / Decent /
   Upgrade Soon / Outdated with a sentence saying why, colour-coded green, yellow,
   orange or red.
 - **Privacy toggle** in the title bar that blanks serial numbers, IP and MAC
   addresses and the Wi-Fi network name before a screenshot.
 - **Windows and Linux** from one codebase, each shipping as a single self-contained
   file with no runtime to install.
-- **`tools/SnapshotDump`** — a console diagnostic that prints everything BBSpecs can
+- **`tools/SnapshotDump`**: a console diagnostic that prints everything BBSpecs can
   read on a machine, so a wrong reading on unfamiliar hardware is traceable.
 
 ### Notes

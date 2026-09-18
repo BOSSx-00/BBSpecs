@@ -7,8 +7,8 @@ namespace BBSpecs.Services;
 /// Administrator (Windows) / root (Linux) checks.
 ///
 /// Reading hardware sensors needs elevation on both platforms: Windows keeps the
-/// sensor driver behind UAC, and on Linux the interesting bits — dmidecode for
-/// RAM slots, smartctl for drive health — only answer to root.
+/// sensor driver behind UAC, and on Linux the interesting bits (dmidecode for
+/// RAM slots, smartctl for drive health) only answer to root.
 /// </summary>
 public static class Elevation
 {

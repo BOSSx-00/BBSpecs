@@ -5,7 +5,7 @@ namespace BBSpecs.Platform.Windows;
 
 /// <summary>
 /// Minimal binding to the native Wi-Fi API. We use this rather than parsing
-/// `netsh wlan show interfaces` because netsh's output is localised — on a German
+/// `netsh wlan show interfaces` because netsh's output is localised: on a German
 /// or French Windows the labels change and the parse silently produces nothing.
 /// </summary>
 internal static class WlanApi
@@ -166,7 +166,7 @@ internal static class WlanApi
         }
         catch
         {
-            // No wireless service, no adapter, or a driver that doesn't answer —
+            // No wireless service, no adapter, or a driver that doesn't answer:
             // the Internet tab simply shows no Wi-Fi section.
         }
         finally

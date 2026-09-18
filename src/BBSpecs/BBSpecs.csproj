@@ -47,7 +47,7 @@
 
       SelfContained bundles the .NET runtime, so nobody needs to install anything
       first. IncludeAllContentForSelfExtract pulls the web/ folder and the icon
-      into the executable too — the runtime unpacks them beside the app on launch,
+      into the executable too: the runtime unpacks them beside the app on launch,
       so AppContext.BaseDirectory still finds them exactly as in a normal build.
     -->
     <SelfContained>true</SelfContained>
@@ -70,7 +70,7 @@
       While developing the interface that means a UAC prompt on every rebuild,
       so `-p:Elevate=false` leaves it out. The app then runs unelevated and shows
       its own "some readings are unavailable" banner, which is the same thing a
-      user without Administrator rights would see — useful to test anyway.
+      user without Administrator rights would see: useful to test anyway.
       Release builds ship with it; the build scripts never pass the flag.
     -->
     <ApplicationManifest Condition="'$(Elevate)' != 'false'">app.manifest</ApplicationManifest>

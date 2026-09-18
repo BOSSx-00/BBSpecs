@@ -35,7 +35,7 @@ public static class Program
 
     /// <summary>
     /// What the collector is doing, shown on the opening screen. Opening the
-    /// sensor layer can take a few seconds on the first run — that is worth
+    /// sensor layer can take a few seconds on the first run: that is worth
     /// saying out loud rather than leaving the window looking stuck.
     /// </summary>
     private static volatile string _phase = "Starting up…";
@@ -52,7 +52,7 @@ public static class Program
     /// <summary>
     /// Volumes the page is allowed to ask the file manager to open.
     ///
-    /// The page is ours, but it is still the untrusted side of this boundary —
+    /// The page is ours, but it is still the untrusted side of this boundary:
     /// handing whatever string arrives to a shell would be a hole. Only paths
     /// BBSpecs itself just reported are openable.
     /// </summary>
@@ -61,7 +61,7 @@ public static class Program
     [STAThread]
     public static int Main()
     {
-        // One instance at a time — two copies both polling hardware sensors can
+        // One instance at a time: two copies both polling hardware sensors can
         // fight over the same driver handle.
         using Mutex single = CreateInstanceMutex(out bool isFirst);
         if (!isFirst)
@@ -189,7 +189,7 @@ public static class Program
         string page = Path.Combine(AppContext.BaseDirectory, "web", "index.html");
         if (!File.Exists(page))
             throw new FileNotFoundException(
-                "BBSpecs couldn't find its display files. The app folder looks incomplete — " +
+                "BBSpecs couldn't find its display files. The app folder looks incomplete: " +
                 "download it again.", page);
 
         _window = new PhotinoWindow()
@@ -243,7 +243,7 @@ public static class Program
 
     /// <summary>
     /// Sensors are polled on one dedicated thread. The Windows sensor library
-    /// keeps per-thread state, so it must always be the same thread — and never
+    /// keeps per-thread state, so it must always be the same thread: and never
     /// the UI thread, because a slow WMI query would freeze the window.
     /// </summary>
     private static void StartCollector()
@@ -479,7 +479,7 @@ public static class Program
 
     /// <summary>
     /// Appends to a log next to the user's data, and never throws. Deliberately
-    /// silent — the collector calls this once per failing read, and a dialog per
+    /// silent: the collector calls this once per failing read, and a dialog per
     /// tick would be unusable.
     /// </summary>
     private static void LogCrash(Exception? ex)

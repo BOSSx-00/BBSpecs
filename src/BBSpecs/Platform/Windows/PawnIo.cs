@@ -42,7 +42,7 @@ public static class PawnIo
 
     /// <summary>
     /// Runs the bundled installer. Only ever called after the user presses the
-    /// button in the banner — BBSpecs never installs a driver on its own.
+    /// button in the banner: BBSpecs never installs a driver on its own.
     /// </summary>
     public static (bool Ok, string Message) Install()
     {
@@ -113,7 +113,7 @@ public static class PawnIo
             }
         }
 
-        // Installed but not yet started still counts — it will start on demand.
+        // Installed but not yet started still counts: it will start on demand.
         try
         {
             if (Reg.Read(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PawnIO", "ImagePath") is not null)

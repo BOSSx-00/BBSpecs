@@ -11,7 +11,7 @@ namespace BBSpecs.Platform.Linux;
 /// Linux readings. The kernel publishes nearly everything through /proc and /sys,
 /// which needs no extra software; a few extras (RAM slot layout, drive health,
 /// NVIDIA details) come from standard tools when they happen to be installed.
-/// Nothing here is required — a machine missing every optional tool still shows
+/// Nothing here is required: a machine missing every optional tool still shows
 /// its processor, memory, drives and network.
 /// </summary>
 public sealed partial class LinuxHardware : SnapshotProvider
@@ -350,7 +350,7 @@ public sealed partial class LinuxHardware : SnapshotProvider
     }
 
     /// <summary>
-    /// Package power from the RAPL energy counter — microjoules since boot, so
+    /// Package power from the RAPL energy counter: microjoules since boot, so
     /// watts is the change divided by the elapsed time.
     /// </summary>
     private double? ReadPackagePower()
@@ -438,7 +438,7 @@ public sealed partial class LinuxHardware : SnapshotProvider
             if (fields.Count >= 4)
             {
                 string device = fields[3];
-                // "GA104 [GeForce RTX 3070]" — the bracketed part is the retail name.
+                // "GA104 [GeForce RTX 3070]": the bracketed part is the retail name.
                 Match bracketed = BracketedNameRx().Match(device);
                 string model = bracketed.Success ? bracketed.Groups[1].Value : device;
 
@@ -973,7 +973,7 @@ public sealed partial class LinuxHardware : SnapshotProvider
 
     /// <summary>
     /// Drive health and lifetime writes, via smartctl's JSON output. Needs root,
-    /// and the tool is optional — without it those rows simply stay blank.
+    /// and the tool is optional: without it those rows simply stay blank.
     /// </summary>
     private static void ReadSmart(DriveInfo drive, string name)
     {

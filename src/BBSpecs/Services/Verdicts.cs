@@ -4,7 +4,7 @@ using BBSpecs.Models;
 namespace BBSpecs.Services;
 
 /// <summary>
-/// Turns raw specs into plain-English ratings. Everything here is a heuristic —
+/// Turns raw specs into plain-English ratings. Everything here is a heuristic:
 /// deliberately so. The goal is to tell a beginner "this is fine" or "this is the
 /// part holding you back", not to produce a benchmark score.
 /// </summary>
@@ -99,7 +99,7 @@ public static partial class Verdicts
         if (age >= 6)
             return cores >= 8
                 ? Verdict.Make("ok", "Still Good",
-                    $"{cores} cores and around {age} years old — plenty for everyday use, a step behind for heavy work.")
+                    $"{cores} cores and around {age} years old, plenty for everyday use, a step behind for heavy work.")
                 : Verdict.Make("aging", "Upgrade Soon",
                     $"{cores} cores and around {age} years old. Fine day to day, but starting to show its age.");
 
@@ -121,11 +121,11 @@ public static partial class Verdicts
         if (temp is not double t) return Verdict.Unknown("No temperature sensor was found for this processor.");
         return t switch
         {
-            < 50 => Verdict.Make("excellent", "Cool", $"{t:0}°C — running cool and comfortable."),
-            < 70 => Verdict.Make("good", "Normal", $"{t:0}°C — a perfectly normal working temperature."),
-            < 85 => Verdict.Make("ok", "Warm", $"{t:0}°C — warm, which is expected under load. Nothing to worry about."),
-            < 95 => Verdict.Make("aging", "Hot", $"{t:0}°C — hot. Worth checking your fans and dusting out the case."),
-            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C — this is high enough that your PC may be slowing itself down to cope. Check cooling."),
+            < 50 => Verdict.Make("excellent", "Cool", $"{t:0}°C, running cool and comfortable."),
+            < 70 => Verdict.Make("good", "Normal", $"{t:0}°C, a perfectly normal working temperature."),
+            < 85 => Verdict.Make("ok", "Warm", $"{t:0}°C, warm, which is expected under load. Nothing to worry about."),
+            < 95 => Verdict.Make("aging", "Hot", $"{t:0}°C, hot. Worth checking your fans and dusting out the case."),
+            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C, this is high enough that your PC may be slowing itself down to cope. Check cooling."),
         };
     }
 
@@ -200,7 +200,7 @@ public static partial class Verdicts
 
         if (integrated)
             return Verdict.Make("ok", "Built-In Graphics",
-                "This graphics is built into your processor. Great for video, browsing and office work — not made for serious gaming.");
+                "This graphics is built into your processor. Great for video, browsing and office work, not made for serious gaming.");
 
         int age = year is int y ? ThisYear - y : 5;
         double vram = vramGb ?? 0;
@@ -211,7 +211,7 @@ public static partial class Verdicts
             return Verdict.Make("poor", "Outdated",
                 vram > 0
                     ? $"{vram:0.#} GB of video memory and roughly {age} years old. Modern games and apps need more."
-                    : $"Roughly {age} years old — modern games and apps need more.");
+                    : $"Roughly {age} years old, modern games and apps need more.");
 
         if (age >= 8 || (vram > 0 && vram < 6))
             return Verdict.Make("aging", "Upgrade Soon",
@@ -234,11 +234,11 @@ public static partial class Verdicts
         if (temp is not double t) return Verdict.Unknown("No temperature sensor was found for this graphics card.");
         return t switch
         {
-            < 50 => Verdict.Make("excellent", "Cool", $"{t:0}°C — idle or barely working."),
-            < 75 => Verdict.Make("good", "Normal", $"{t:0}°C — exactly where a graphics card should be."),
-            < 85 => Verdict.Make("ok", "Warm", $"{t:0}°C — warm but completely normal while gaming."),
-            < 92 => Verdict.Make("aging", "Hot", $"{t:0}°C — hot. Make sure the case has airflow and the fans are clean."),
-            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C — high enough that the card is likely slowing itself down. Check cooling."),
+            < 50 => Verdict.Make("excellent", "Cool", $"{t:0}°C, idle or barely working."),
+            < 75 => Verdict.Make("good", "Normal", $"{t:0}°C, exactly where a graphics card should be."),
+            < 85 => Verdict.Make("ok", "Warm", $"{t:0}°C, warm but completely normal while gaming."),
+            < 92 => Verdict.Make("aging", "Hot", $"{t:0}°C, hot. Make sure the case has airflow and the fans are clean."),
+            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C, high enough that the card is likely slowing itself down. Check cooling."),
         };
     }
 
@@ -256,7 +256,7 @@ public static partial class Verdicts
             < 10 => Verdict.Make("aging", "Just Enough",
                 $"{totalGb:0.#} GB{typeNote}{speedNote}. Fine for browsing and office work, tight for gaming or lots of tabs."),
             < 20 => Verdict.Make("good", "Good",
-                $"{totalGb:0.#} GB{typeNote}{speedNote} — the sweet spot for gaming and everyday use."),
+                $"{totalGb:0.#} GB{typeNote}{speedNote}, the sweet spot for gaming and everyday use."),
             < 40 => Verdict.Make("excellent", "Amazing",
                 $"{totalGb:0.#} GB{typeNote}{speedNote}. Plenty of headroom for gaming, editing and heavy multitasking."),
             _ => Verdict.Make("excellent", "Amazing",
@@ -278,7 +278,7 @@ public static partial class Verdicts
 
         if (kind.Contains("NVMe", StringComparison.OrdinalIgnoreCase))
             return Verdict.Make("excellent", "Amazing",
-                "An NVMe solid-state drive — the fastest kind of storage you can put in a PC.");
+                "An NVMe solid-state drive, the fastest kind of storage you can put in a PC.");
 
         if (kind.Contains("SSD", StringComparison.OrdinalIgnoreCase))
             return Verdict.Make("good", "Good",
@@ -301,13 +301,13 @@ public static partial class Verdicts
 
         if (pctFree < 5 || freeGb < 10)
             return Verdict.Make("poor", "Almost Full",
-                $"Only {freeGb:0.#} GB free. Windows needs breathing room — free up space to avoid slowdowns and failed updates.");
+                $"Only {freeGb:0.#} GB free. Windows needs breathing room, free up space to avoid slowdowns and failed updates.");
         if (pctFree < 15)
             return Verdict.Make("aging", "Getting Full",
                 $"{freeGb:0.#} GB free ({pctFree:0}%). Worth clearing some space soon.");
         if (pctFree < 35)
-            return Verdict.Make("good", "Healthy", $"{freeGb:0.#} GB free ({pctFree:0}%) — comfortable.");
-        return Verdict.Make("excellent", "Lots Of Room", $"{freeGb:0.#} GB free ({pctFree:0}%) — plenty of space.");
+            return Verdict.Make("good", "Healthy", $"{freeGb:0.#} GB free ({pctFree:0}%), comfortable.");
+        return Verdict.Make("excellent", "Lots Of Room", $"{freeGb:0.#} GB free ({pctFree:0}%), plenty of space.");
     }
 
     public static Verdict RateDriveTemp(double? temp)
@@ -315,10 +315,10 @@ public static partial class Verdicts
         if (temp is not double t) return Verdict.Unknown("This drive doesn't report a temperature.");
         return t switch
         {
-            < 45 => Verdict.Make("excellent", "Cool", $"{t:0}°C — nice and cool."),
-            < 60 => Verdict.Make("good", "Normal", $"{t:0}°C — a normal working temperature."),
-            < 70 => Verdict.Make("ok", "Warm", $"{t:0}°C — warm, but within spec."),
-            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C — hot for a drive. Check airflow around it."),
+            < 45 => Verdict.Make("excellent", "Cool", $"{t:0}°C, nice and cool."),
+            < 60 => Verdict.Make("good", "Normal", $"{t:0}°C, a normal working temperature."),
+            < 70 => Verdict.Make("ok", "Warm", $"{t:0}°C, warm, but within spec."),
+            _ => Verdict.Make("poor", "Too Hot", $"{t:0}°C, hot for a drive. Check airflow around it."),
         };
     }
 
@@ -346,7 +346,7 @@ public static partial class Verdicts
                 $"{signalPercent}% signal{where}{kind}. Solid for streaming and gaming.");
         if (signalPercent >= 35)
             return Verdict.Make("ok", "Fair Signal",
-                $"{signalPercent}% signal{where}. You may see slowdowns — moving closer to the router would help.");
+                $"{signalPercent}% signal{where}. You may see slowdowns, moving closer to the router would help.");
         return Verdict.Make("poor", "Weak Signal",
             $"{signalPercent}% signal{where}. Expect drop-outs. Move closer to the router or use a cable.");
     }

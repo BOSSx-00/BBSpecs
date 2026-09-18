@@ -59,8 +59,8 @@ public abstract partial class NetworkService
 
     /// <summary>
     /// A cheap summary of "which way am I reaching the internet". When this
-    /// changes — a VPN goes up or down, the address moves, Wi-Fi swaps to
-    /// Ethernet — any public address already on screen is stale.
+    /// changes (a VPN goes up or down, the address moves, Wi-Fi swaps to
+    /// Ethernet) any public address already on screen is stale.
     /// </summary>
     private string _connectionFingerprint = "";
 
@@ -102,7 +102,7 @@ public abstract partial class NetworkService
         }
 
         // The default route often points at a VPN tunnel. That's worth knowing, but
-        // it isn't the adapter the person plugged in — for "your network details"
+        // it isn't the adapter the person plugged in: for "your network details"
         // we want the real Wi-Fi or Ethernet card underneath.
         AdapterInfo? physical = info.Adapters
             .Where(a => a.IsUp && !a.IsVirtual && !string.IsNullOrEmpty(a.Ipv4))
@@ -252,7 +252,7 @@ public abstract partial class NetworkService
     /// <summary>
     /// A VPN counts as active only when its adapter is carrying the default
     /// route. Several clients leave their tunnel adapter installed, up, and
-    /// still holding an address after you disconnect — checking only for its
+    /// still holding an address after you disconnect: checking only for its
     /// presence reports a VPN that is no longer routing anything, and keeps
     /// reporting it indefinitely.
     /// </summary>
@@ -267,7 +267,7 @@ public abstract partial class NetworkService
             return new VpnInfo
             {
                 Active = false,
-                Summary = "No VPN detected — you're connecting to the internet directly.",
+                Summary = "No VPN detected: you're connecting to the internet directly.",
             };
         }
 
@@ -284,7 +284,7 @@ public abstract partial class NetworkService
             // Of the tunnel adapters present, report the one actually in use.
             if (routed is not null && nic.Name != routed.Name) continue;
 
-            // A VPN adapter that exists but holds no address isn't carrying traffic —
+            // A VPN adapter that exists but holds no address isn't carrying traffic:
             // plenty of machines have an idle TAP adapter sitting around.
             bool hasAddress;
             try
@@ -309,7 +309,7 @@ public abstract partial class NetworkService
         return new VpnInfo
         {
             Active = false,
-            Summary = "No VPN detected — you're connecting to the internet directly.",
+            Summary = "No VPN detected: you're connecting to the internet directly.",
         };
     }
 
@@ -398,7 +398,7 @@ public abstract partial class NetworkService
         catch
         {
             // Unprivileged ICMP is blocked on plenty of Linux setups and firewalled
-            // on plenty of networks — fall back to asking for a route out.
+            // on plenty of networks: fall back to asking for a route out.
             try { _online = NetworkInterface.GetIsNetworkAvailable(); } catch { _online = false; }
             _pingMs = null;
         }
@@ -407,7 +407,7 @@ public abstract partial class NetworkService
     /// <summary>
     /// Where the public address lookup is asked, in order. Each free service has
     /// its own rate limit, and behind a VPN or a shared connection an exit address
-    /// can already be over one through no fault of this machine — so the answer is
+    /// can already be over one through no fault of this machine: so the answer is
     /// to ask somewhere else rather than to give up.
     /// </summary>
     private static readonly string[] LookupServices =
@@ -420,7 +420,7 @@ public abstract partial class NetworkService
 
     /// <summary>
     /// Looks up the public IP and internet provider. Only ever called when the
-    /// user clicks the button on the Internet tab — nothing leaves the machine
+    /// user clicks the button on the Internet tab: nothing leaves the machine
     /// otherwise.
     /// </summary>
     public async Task<PublicIpInfo> FetchPublicIpAsync()
@@ -470,7 +470,7 @@ public abstract partial class NetworkService
         _publicIp = new PublicIpInfo
         {
             Error = problems.Any(p => p.Contains("429", StringComparison.Ordinal))
-                ? "The free lookup services are busy right now — this happens when lots of people " +
+                ? "The free lookup services are busy right now: this happens when lots of people " +
                   "share one address, which is normal on a VPN. Try again in a minute."
                 : "Couldn't reach any lookup service. " + string.Join("; ", problems.Take(2)),
         };

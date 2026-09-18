@@ -110,7 +110,7 @@ public sealed class CoreInfo
     public double? LoadPercent { get; set; }
     public double? ClockGhz { get; set; }
     public double? TempC { get; set; }
-    /// <summary>good | warm | hot — how this individual core is doing.</summary>
+    /// <summary>good | warm | hot: how this individual core is doing.</summary>
     public string Health { get; set; } = "unknown";
 }
 

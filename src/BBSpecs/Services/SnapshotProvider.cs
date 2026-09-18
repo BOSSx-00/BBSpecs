@@ -4,8 +4,8 @@ using DriveInfo = BBSpecs.Models.DriveInfo;
 namespace BBSpecs.Services;
 
 /// <summary>
-/// Orchestrates a snapshot. Everything platform-independent lives here — the
-/// static/live caching split, the network layer and the overall verdict — while
+/// Orchestrates a snapshot. Everything platform-independent lives here (the
+/// static/live caching split, the network layer and the overall verdict), while
 /// each operating system supplies the actual readings through the abstract
 /// members below.
 /// </summary>

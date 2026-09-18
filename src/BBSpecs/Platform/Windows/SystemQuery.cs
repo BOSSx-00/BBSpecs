@@ -6,7 +6,7 @@ namespace BBSpecs.Platform.Windows;
 
 /// <summary>
 /// Thin, forgiving wrappers over WMI and the registry. Every accessor returns a
-/// sensible default rather than throwing — a missing field should blank out one
+/// sensible default rather than throwing: a missing field should blank out one
 /// row in the UI, never take down the whole page.
 /// </summary>
 public static class Wmi
@@ -88,7 +88,7 @@ public static class Wmi
     /// <summary>
     /// Escapes a value going inside the braces of an ASSOCIATORS query. That part
     /// is parsed as an object path rather than a string literal, so backslashes
-    /// must stay single — doubling them makes WMI answer "Not found".
+    /// must stay single: doubling them makes WMI answer "Not found".
     /// </summary>
     public static string EscapePath(string value) => value.Replace("'", @"\'");
 }
@@ -158,7 +158,7 @@ public static class Reg
     }
 
     /// <summary>
-    /// "PCI bus 1, device 0, function 0" — Windows stores this per device, sometimes
+    /// "PCI bus 1, device 0, function 0": Windows stores this per device, sometimes
     /// as an indirect string with the numbers appended in a (1,0,0) tail.
     /// </summary>
     public static string? DeviceLocation(string pnpDeviceId)
@@ -180,7 +180,7 @@ public static class Reg
                     return $"PCI bus {n[0].Trim()}, device {n[1].Trim()}, function {n[2].Trim()}";
             }
 
-            // Not an indirect string — use it as-is unless it's an unresolved @path
+            // Not an indirect string: use it as-is unless it's an unresolved @path
             return raw.StartsWith('@') ? null : raw;
         }
         catch { return null; }

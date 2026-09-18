@@ -1,8 +1,8 @@
 using BBSpecs.Models;
 using BBSpecs.Services;
 
-// Collects two snapshots a second apart — throughput and CPU load need a delta
-// to mean anything — then prints the second and writes it out as the exact JSON
+// Collects two snapshots a second apart: throughput and CPU load need a delta
+// to mean anything: then prints the second and writes it out as the exact JSON
 // the user interface receives.
 //
 // Pass --sensors to list every raw sensor instead. That is the quickest way to
@@ -108,7 +108,7 @@ static string N(double? value, string format = "0.#") => value?.ToString(format)
 /// <summary>
 /// The sensor library's own diagnostic dump. When a machine reports no
 /// temperatures at all, the Ring0 section of this says exactly why the kernel
-/// driver did or didn't load — which beats inferring it from the outside.
+/// driver did or didn't load: which beats inferring it from the outside.
 /// </summary>
 static void DumpDriverReport()
 {
@@ -166,7 +166,7 @@ static void DumpSensors()
     }
 
     if (hub.Hardware.Count == 0)
-        Console.WriteLine("No hardware was enumerated at all — the sensor driver did not load.");
+        Console.WriteLine("No hardware was enumerated at all: the sensor driver did not load.");
 
     hub.Dispose();
 #else

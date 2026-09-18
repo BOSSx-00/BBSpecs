@@ -2,8 +2,8 @@ namespace BBSpecs.Services;
 
 /// <summary>
 /// Checks the one thing BBSpecs can't supply for itself: the system webview it
-/// draws into. Everything else — the .NET runtime, the sensor library, the
-/// fonts, the interface — ships inside the executable.
+/// draws into. Everything else (the .NET runtime, the sensor library, the
+/// fonts, the interface) ships inside the executable.
 ///
 /// Without this check a machine missing the webview would launch, fail inside
 /// the native layer, and close again without a word, because a windowed app has
@@ -34,7 +34,7 @@ public static class Prerequisites
             "BBSpecs draws its display using the Microsoft Edge WebView2 Runtime, and it " +
             "isn't installed on this PC.\n\n" +
             "It's a free Microsoft component that comes with Windows 11 and with Microsoft " +
-            "Edge on Windows 10 — this PC is one of the rare ones without it.\n\n" +
+            "Edge on Windows 10: this PC is one of the rare ones without it.\n\n" +
             "Install it once and BBSpecs will work from then on.",
             "https://go.microsoft.com/fwlink/p/?LinkId=2124703",
             "Open the Microsoft download page now?");

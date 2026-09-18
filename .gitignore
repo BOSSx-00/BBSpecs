@@ -8,8 +8,8 @@ build/staging/
 # but it is committed so the project builds without running that script first.
 !src/BBSpecs/Assets/bbspecs.ico
 
-# Diagnostic output. These describe the machine they were generated on —
-# serial numbers, addresses, network names — and must never be published.
+# Diagnostic output. These describe the machine they were generated on
+# (serial numbers, addresses, network names) and must never be published.
 snapshot.json
 crash.log
 driver-report.txt

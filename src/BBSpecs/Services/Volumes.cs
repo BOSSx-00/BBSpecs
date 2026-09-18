@@ -71,7 +71,7 @@ public static class Volumes
         }
     }
 
-    /// <summary>Re-reads free space. Called every tick — it's the number people watch.</summary>
+    /// <summary>Re-reads free space. Called every tick: it's the number people watch.</summary>
     public static void RefreshSpace(List<VolumeInfo> volumes)
     {
         foreach (VolumeInfo v in volumes)

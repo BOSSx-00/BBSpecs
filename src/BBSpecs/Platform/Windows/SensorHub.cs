@@ -6,7 +6,7 @@ namespace BBSpecs.Platform.Windows;
 /// <summary>
 /// Owns the LibreHardwareMonitor <see cref="Computer"/>. This is the only place
 /// that talks to the sensor library, and every call into it happens on the single
-/// collector thread — the underlying library is not thread-safe.
+/// collector thread: the underlying library is not thread-safe.
 /// </summary>
 public sealed class SensorHub : IDisposable
 {
@@ -132,7 +132,7 @@ public sealed class SensorHub : IDisposable
         {
             Note = "Processor temperature is read through PawnIO, a small free driver that " +
                    "isn't installed on this PC. It's open source, signed by Microsoft, and " +
-                   "installs in under a minute — temperatures then appear on their own. " +
+                   "installs in under a minute: temperatures then appear on their own. " +
                    "Everything else on this page already works without it.";
             HelpUrl = PawnIo.DownloadUrl;
             return;
@@ -212,7 +212,7 @@ public sealed class SensorHub : IDisposable
     /// <summary>
     /// The sensor library's own diagnostic dump, including why its kernel driver
     /// did or didn't load. This is the authoritative answer when a machine reports
-    /// no temperatures — far better than inferring from the outside.
+    /// no temperatures: far better than inferring from the outside.
     /// </summary>
     public string Report()
     {

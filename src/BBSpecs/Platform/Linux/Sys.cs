@@ -2,7 +2,7 @@ namespace BBSpecs.Platform.Linux;
 
 /// <summary>
 /// Reads the kernel's virtual filesystems. Every accessor answers null or an
-/// empty sequence when a file is missing, unreadable or in an unexpected shape —
+/// empty sequence when a file is missing, unreadable or in an unexpected shape:
 /// sysfs layouts vary between kernels, drivers and distributions, and a machine
 /// that lays things out differently should lose one row, not the whole app.
 /// </summary>
@@ -69,7 +69,7 @@ public static class Sys
         catch { return null; }
     }
 
-    /// <summary>The last path segment of a symlink target — e.g. the driver name.</summary>
+    /// <summary>The last path segment of a symlink target: e.g. the driver name.</summary>
     public static string? LinkName(string path)
     {
         string? target = LinkTarget(path);
@@ -95,7 +95,7 @@ public static class Sys
     }
 }
 
-/// <summary>One hwmon chip — the kernel's uniform interface to temperature, fan and power sensors.</summary>
+/// <summary>One hwmon chip: the kernel's uniform interface to temperature, fan and power sensors.</summary>
 public sealed record HwmonChip(string Path, string Name);
 
 public static class Hwmon

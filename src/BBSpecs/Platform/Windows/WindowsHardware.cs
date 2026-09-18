@@ -169,7 +169,7 @@ public sealed partial class WindowsHardware : SnapshotProvider
             cpu.TempMaxC = warmed.Count > 0 ? warmed.Max(c => c.TempC!.Value) : cpu.TempC;
         }
 
-        // Without sensor access we can still show load — Windows tracks that itself.
+        // Without sensor access we can still show load: Windows tracks that itself.
         cpu.LoadPercent ??= ReadCpuLoadFallback();
         cpu.Thermal = Verdicts.RateCpuTemp(cpu.TempC);
     }
@@ -242,7 +242,7 @@ public sealed partial class WindowsHardware : SnapshotProvider
             list.Add(gpu);
         }
 
-        // Dedicated cards first — that's the one people care about.
+        // Dedicated cards first: that's the one people care about.
         return list.OrderBy(g => g.IsIntegrated).ToList();
     }
 
@@ -517,7 +517,7 @@ public sealed partial class WindowsHardware : SnapshotProvider
         var letters = new List<char>();
 
         // The text inside the braces is an object path, so backslashes are NOT
-        // doubled the way they would be in a WHERE clause — doubling them makes
+        // doubled the way they would be in a WHERE clause: doubling them makes
         // WMI answer "Not found".
         string diskPath = Wmi.EscapePath(diskDeviceId);
         foreach (ManagementObject part in Wmi.Query(

@@ -179,7 +179,7 @@ function bar(label, valueText, percent, tier) {
 
 /**
  * Circular gauge. `max` scales the arc; the printed number is still the raw
- * value. When there is no reading the dial dims and says so — an empty ring on
+ * value. When there is no reading the dial dims and says so: an empty ring on
  * its own just looks like the app is broken. `naNote` explains why in a few words.
  */
 function gauge(name, value, unit, tier, max, naNote) {
@@ -405,7 +405,7 @@ function upgradesPanel(d) {
     return `<div style="margin-top:14px">
       <div class="section-label">Upgrade ideas</div>
       <p class="verdict-note" style="margin-top:0">
-        Nothing here needs replacing. Every major part of this machine is doing its job —
+        Nothing here needs replacing. Every major part of this machine is doing its job:
         save your money.
       </p>
     </div>`;
@@ -422,7 +422,7 @@ function upgradesPanel(d) {
     </div>`).join('');
 
   return `<div style="margin-top:14px">
-    <div class="section-label">Upgrade ideas — best value first</div>
+    <div class="section-label">Upgrade ideas: best value first</div>
     ${rows}
     <p class="verdict-note">
       These are the cheapest parts that would actually make a difference to this machine,
@@ -486,7 +486,7 @@ function renderCpu(d) {
       <div class="note note--good"><span class="note__dot"></span>
         <span><strong>Threads</strong> (logical processors) let each core juggle two jobs, so Windows sees ${c.logicalProcessors} workers rather than ${c.physicalCores}.</span></div>
       <div class="note note--good"><span class="note__dot"></span>
-        <span><strong>GHz</strong> is how fast each core runs. It rises and falls on its own depending on what you're doing — that's normal.</span></div>
+        <span><strong>GHz</strong> is how fast each core runs. It rises and falls on its own depending on what you're doing: that's normal.</span></div>
       <div class="note note--warn"><span class="note__dot"></span>
         <span><strong>Temperature</strong> under 85°C is fine. Consistently above that, and it's worth cleaning the dust out of your cooler.</span></div>
     </div>`);
@@ -714,7 +714,7 @@ function renderInternet(d) {
       stat('Downloading', rate(net.downloadKbps)),
       stat('Uploading', rate(net.uploadKbps))
     ])}
-    <p class="verdict-note">This is how much data is moving over your connection this second — not your maximum internet speed.</p>`);
+    <p class="verdict-note">This is how much data is moving over your connection this second: not your maximum internet speed.</p>`);
 
   const wifi = net.wifi
     ? card('Wi-Fi', pill(net.wifi.verdict), `
@@ -790,7 +790,7 @@ function publicIpBody(d) {
 
   if (!live) {
     return `<div class="headline headline--sm">Hidden</div>
-      <p class="verdict-note">This is the address the rest of the internet sees when you connect — it comes from your internet provider, not from your PC. BBSpecs only looks it up when you ask.</p>
+      <p class="verdict-note">This is the address the rest of the internet sees when you connect: it comes from your internet provider, not from your PC. BBSpecs only looks it up when you ask.</p>
       <button class="btn" data-action="publicIp" type="button" style="margin-top:11px">Look up my public address</button>`;
   }
 
@@ -808,8 +808,8 @@ function publicIpBody(d) {
     stat('Internet provider', priv(live.isp), { raw: true }),
     where ? stat('Approximate location', priv(where), { raw: true }) : null
   ]) + `<p class="verdict-note">${vpn
-    ? `You're on a VPN, so this is your VPN server's address and location — not yours. That's exactly what a VPN is for.`
-    : `The location is a rough guess based on your provider — it's usually a nearby city rather than where you actually are.`}</p>
+    ? `You're on a VPN, so this is your VPN server's address and location: not yours. That's exactly what a VPN is for.`
+    : `The location is a rough guess based on your provider: it's usually a nearby city rather than where you actually are.`}</p>
   <div class="btn-row" style="margin-top:11px">
     <button class="btn" data-action="publicIp" type="button">Refresh</button>
     <span class="verdict-note" style="margin:0">Updates on its own when your connection changes.</span>
@@ -838,7 +838,7 @@ function adminBanner(d) {
     message = d.sensorNote || 'The sensor driver could not be started on this machine.';
   }
 
-  // A fix the user can act on beats an explanation they can't — and doing it for
+  // A fix the user can act on beats an explanation they can't: and doing it for
   // them beats sending them to a download page.
   let action = '';
 
@@ -864,7 +864,7 @@ function adminBanner(d) {
     : '';
 
   const failed = state.relaunchFailed
-    ? `<span style="display:block;margin-top:7px">That didn't work — you can start BBSpecs as ${esc(state.roleName)} yourself instead.</span>`
+    ? `<span style="display:block;margin-top:7px">That didn't work: you can start BBSpecs as ${esc(state.roleName)} yourself instead.</span>`
     : '';
 
   return `<div class="banner">
@@ -1139,7 +1139,7 @@ startBabyTalk();
 
 host.send('ready');
 
-// The page asks for readings rather than waiting to be pushed to — see the note
+// The page asks for readings rather than waiting to be pushed to: see the note
 // on the host side. Asking straight away means the first panel appears as soon as
 // the opening snapshot is ready instead of a second later.
 host.send('poll');

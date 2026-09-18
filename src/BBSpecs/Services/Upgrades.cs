@@ -6,7 +6,7 @@ namespace BBSpecs.Services;
 /// <summary>
 /// Works out what to spend money on first.
 ///
-/// The rule throughout is cheapest thing that fixes the actual bottleneck — the
+/// The rule throughout is cheapest thing that fixes the actual bottleneck: the
 /// parts are named so a beginner can search for them, and nothing suggests
 /// replacing something that is still doing its job. No prices: they go stale
 /// faster than the app ships, and a wrong price is worse than none.
@@ -98,7 +98,7 @@ public static class Upgrades
                 Pick = $"One matched {kind} {form} kit of {(memory.TotalGb >= 28 ? "32 GB (2 × 16 GB)" : "16 GB (2 × 8 GB)")}",
                 Why = $"{detail}, so they all run at the slowest one's speed" +
                       (runningSlow
-                          ? $" — yours are rated for {rated.Max()} MHz but running at {memory.SpeedMhz} MHz. "
+                          ? $": yours are rated for {rated.Max()} MHz but running at {memory.SpeedMhz} MHz. "
                           : ". ") +
                       "A single matched kit fixes that, and it's the cheapest free performance on this list.",
             });
@@ -117,10 +117,10 @@ public static class Upgrades
             {
                 Part = "Main drive",
                 Priority = "high",
-                Current = $"{system.Model} — a spinning hard drive",
+                Current = $"{system.Model}: a spinning hard drive",
                 Pick = "Crucial BX500 1 TB SATA SSD",
                 Why = "Windows is installed on a mechanical drive. Moving it to an SSD is the single " +
-                      "biggest speed improvement available to this machine — boot and app loading go " +
+                      "biggest speed improvement available to this machine: boot and app loading go " +
                       "from tens of seconds to a few. A SATA SSD fits any computer that has a hard drive.",
             });
         }
@@ -132,12 +132,12 @@ public static class Upgrades
             {
                 Part = "Failing drive",
                 Priority = "high",
-                Current = $"{worn.Model} — {worn.HealthPercent:0}% of its rated life left",
+                Current = $"{worn.Model}: {worn.HealthPercent:0}% of its rated life left",
                 Pick = worn.Kind.Contains("NVMe", StringComparison.OrdinalIgnoreCase)
                     ? "Crucial P3 Plus 1 TB NVMe SSD"
                     : "Crucial BX500 1 TB SATA SSD",
                 Why = "This drive is near the end of its write life. Back up anything on it now and " +
-                      "plan a replacement — drives usually give this warning long before they fail, " +
+                      "plan a replacement: drives usually give this warning long before they fail, " +
                       "but not always.",
             });
         }
@@ -174,7 +174,7 @@ public static class Upgrades
                 Part = "Graphics driver",
                 Priority = "high",
                 Current = "Windows is using a generic display driver",
-                Pick = "No purchase needed — install the driver from NVIDIA, AMD or Intel",
+                Pick = "No purchase needed: install the driver from NVIDIA, AMD or Intel",
                 Why = "Your graphics card is working at a fraction of its ability because the proper " +
                       "driver isn't installed. This is free to fix and will change everything.",
             });
@@ -187,10 +187,10 @@ public static class Upgrades
             {
                 Part = "Graphics",
                 Priority = "low",
-                Current = $"{gpu.Name} — built into the processor",
+                Current = $"{gpu.Name}: built into the processor",
                 Pick = "Intel Arc B580 12 GB",
                 Why = "Built-in graphics is fine for video, browsing and office work. Only add a card " +
-                      "if you want to play modern games — and if you do, this one gives the most " +
+                      "if you want to play modern games, and if you do, this one gives the most " +
                       "frames and video memory per pound at the budget end. Check your power supply " +
                       "and case have room first.",
             });
@@ -205,7 +205,7 @@ public static class Upgrades
         {
             Part = "Graphics card",
             Priority = gpu.Verdict.Tier == "poor" ? "high" : "medium",
-            Current = $"{gpu.Name}{(vram > 0 ? $" — {vram:0.#} GB of video memory" : "")}",
+            Current = $"{gpu.Name}{(vram > 0 ? $": {vram:0.#} GB of video memory" : "")}",
             Pick = vram > 0 && vram < 4
                 ? "Intel Arc B580 12 GB"
                 : "AMD Radeon RX 7600 8 GB, or Intel Arc B580 12 GB for more video memory",
@@ -225,10 +225,10 @@ public static class Upgrades
         {
             Part = "Processor",
             Priority = cpu.Verdict.Tier == "poor" ? "medium" : "low",
-            Current = $"{cpu.ShortName} — {cpu.PhysicalCores} cores",
+            Current = $"{cpu.ShortName}: {cpu.PhysicalCores} cores",
             Pick = "AMD Ryzen 5 7600, with a compatible AM5 motherboard and DDR5 memory",
             Why = "A processor swap means a new motherboard and new memory too, so leave it until " +
-                  "last — memory, an SSD and a graphics card all cost less and are felt more. When " +
+                  "last: memory, an SSD and a graphics card all cost less and are felt more. When " +
                   "you do, this is the cheapest current chip that won't feel slow for years.",
         });
     }
@@ -244,7 +244,7 @@ public static class Upgrades
             Current = $"Processor running at {temp:0}°C",
             Pick = "Thermalright Peerless Assassin 120 SE",
             Why = "Your processor is hot enough to be slowing itself down to protect itself, which " +
-                  "costs you speed you already paid for. Try cleaning the dust out first — that's " +
+                  "costs you speed you already paid for. Try cleaning the dust out first: that's " +
                   "free. If it stays hot, this cooler outperforms things costing three times as much.",
         });
     }
@@ -282,8 +282,8 @@ public static class Upgrades
             {
                 Part = "Wi-Fi signal",
                 Priority = "medium",
-                Current = $"{wifi.SignalPercent}% signal — {wifi.SignalLabel.ToLowerInvariant()}",
-                Pick = "No purchase needed — move closer to the router, or run a network cable",
+                Current = $"{wifi.SignalPercent}% signal: {wifi.SignalLabel.ToLowerInvariant()}",
+                Pick = "No purchase needed: move closer to the router, or run a network cable",
                 Why = "Your wireless signal is weak, which causes stuttering and drop-outs that look " +
                       "like a slow internet connection but aren't. Moving the router or the PC is " +
                       "free; a cable fixes it completely. Only buy a mesh extender if neither works.",

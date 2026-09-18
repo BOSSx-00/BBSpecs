@@ -1,8 +1,8 @@
 /* ==========================================================================
-   BBSpecs — BOSSx palette
+   BBSpecs: BOSSx palette
    Dark grey surfaces, #ff1f3d for titles and trim, white body text, and a
    traffic-light trio (green / yellow / red) reserved strictly for health.
-   Set in Geist Pixel, which ships inside the app — nothing is fetched from the web.
+   Set in Geist Pixel, which ships inside the app: nothing is fetched from the web.
    ========================================================================== */
 
 @font-face {
@@ -32,7 +32,7 @@
   --muted:        #9b9da4;
   --muted-dim:    #6d6f76;
 
-  /* health — the only place these colours are allowed */
+  /* health: the only place these colours are allowed */
   --green:        #21d662;
   --yellow:       #ffc61a;
   --orange:       #ff8a1f;
@@ -300,7 +300,7 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   white-space: nowrap;
-  /* no chip, no border, no background — the colour is the indicator */
+  /* no chip, no border, no background: the colour is the indicator */
 }
 
 /*
@@ -308,7 +308,7 @@ body {
 
   Three stacked shadows rather than one: a bright, tight core that keeps the
   letterforms crisp, then two progressively wider and fainter halos. That
-  falloff is what reads as neon — a single wide blur at high opacity smears the
+  falloff is what reads as neon: a single wide blur at high opacity smears the
   text, and a single tight one barely registers.
 
   Each tier sets --glow to its own colour channels so one set of keyframes can
@@ -334,8 +334,8 @@ body {
 /*
   Deliberately uneven stops. A smooth sine reads as breathing; real electric
   light sits mostly steady and drops for an instant, so the two quick dips at
-  22% and 73% are what sell it. The letters themselves never change opacity —
-  only the halo around them — so text stays fully legible throughout.
+  22% and 73% are what sell it. The letters themselves never change opacity,
+  only the halo around them, so text stays fully legible throughout.
 */
 @keyframes electric {
   0%, 100% {

@@ -5,7 +5,7 @@ namespace BBSpecs.Services;
 
 /// <summary>
 /// Native message boxes for the handful of failures that happen before there is
-/// an app window to show them in — chiefly a missing webview, which is the one
+/// an app window to show them in: chiefly a missing webview, which is the one
 /// thing that stops BBSpecs from drawing anything at all.
 ///
 /// Photino's own ShowMessage needs a window, so it is no use here.

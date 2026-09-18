@@ -4,7 +4,7 @@
 # This also happens to be what SignPath Foundation requires before it will sign
 # anything: releases have to be produced by a traceable CI build from public
 # source, not uploaded from somebody's laptop. Signing slots into the Windows
-# job once the project is approved — see the commented step there.
+# job once the project is approved: see the commented step there.
 
 name: Release
 

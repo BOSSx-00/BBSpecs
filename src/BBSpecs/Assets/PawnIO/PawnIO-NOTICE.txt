@@ -1,4 +1,4 @@
-PawnIO — third-party component bundled with BBSpecs
+PawnIO: third-party component bundled with BBSpecs
 ====================================================
 
 BBSpecs includes the official PawnIO installer (PawnIO_setup.exe, version 2.2.0)
@@ -10,7 +10,7 @@ WHAT IT IS
 ----------
 PawnIO is a scriptable kernel driver that lets programs read hardware registers
 safely. Reading a processor's temperature requires executing a privileged CPU
-instruction (RDMSR), which no ordinary program is allowed to do — that is why
+instruction (RDMSR), which no ordinary program is allowed to do. That is why
 Task Manager doesn't show CPU temperature either. Every tool that does show it
 installs a driver of this kind.
 

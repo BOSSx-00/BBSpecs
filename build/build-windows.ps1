@@ -4,7 +4,7 @@
 
 .DESCRIPTION
     Produces a single self-contained BBSpecs.exe in dist\. Nobody needs the .NET
-    runtime, Visual Studio or anything else installed to run it — they download
+    runtime, Visual Studio or anything else installed to run it: they download
     the one file and double-click it.
 
 .EXAMPLE

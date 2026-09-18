@@ -3,7 +3,7 @@
 # Builds the downloadable BBSpecs app for Linux.
 #
 # Produces a single self-contained binary in dist/ plus a .desktop launcher and
-# an installer. Nobody needs the .NET runtime installed — one file, mark it
+# an installer. Nobody needs the .NET runtime installed: one file, mark it
 # executable, run it.
 #
 # Usage:  ./build/build-linux.sh [Release|Debug] [linux-x64|linux-arm64]

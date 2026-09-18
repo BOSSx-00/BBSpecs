@@ -5,7 +5,7 @@
 <h1 align="center">BBSpecs</h1>
 
 <p align="center">
-  A friendly hardware monitor for people who just want to know what's in their PC —
+  A friendly hardware monitor for people who just want to know what's in their PC,
   and whether it's doing alright.
 </p>
 
@@ -16,19 +16,19 @@ what your computer is made of in plain English: what your processor is, how warm
 running, how much video memory your graphics card has, how full your drives are, and
 what your internet connection actually looks like.
 
-It's the Performance tab of Task Manager with more detail — minus the parts that
+It's the Performance tab of Task Manager with more detail, minus the parts that
 assume you already know what a "P-state" is. Every reading comes with a plain-language
 verdict: **Amazing**, **Good**, **Decent**, **Upgrade Soon** or **Outdated**, and a
 sentence saying why.
 
 Two buttons on the Overview do the things people actually want afterwards:
 
-- **Copy Specs** puts a short summary on your clipboard — processor, graphics,
-  motherboard, memory, every drive, and your network hardware — ready to paste
+- **Copy Specs** puts a short summary on your clipboard (processor, graphics,
+  motherboard, memory, every drive, and your network hardware), ready to paste
   wherever you're asking for help. No serial numbers, no addresses.
 - **Upgrade ideas** names the cheapest part that would actually make a difference to
   *your* machine, in the order worth buying. It reads the real state of things, so it
-  catches problems a spec sheet won't — like mismatched memory sticks quietly dragging
+  catches problems a spec sheet won't, like mismatched memory sticks quietly dragging
   a whole set down to the slowest one's speed.
 
 **Windows and Linux.** One codebase, a native app on both.
@@ -42,11 +42,11 @@ Two buttons on the Overview do the things people actually want afterwards:
 1. Download `BBSpecs-<version>-win-x64.exe`.
 2. Double-click it and accept the Windows prompt.
 
-That's the whole thing — one file, nothing to install. The prompt is Windows asking
+That's the whole thing. One file, nothing to install. The prompt is Windows asking
 whether to let BBSpecs run as Administrator, which it needs because Windows only lets
 elevated programs read temperature sensors.
 
-Processor temperature needs a kernel driver — Windows offers no other way, which is
+Processor temperature needs a kernel driver. Windows offers no other way, which is
 why Task Manager doesn't show it either. BBSpecs carries the official
 [PawnIO](https://pawnio.eu) installer inside its own executable and offers to run it
 with one click the first time it's needed. Nothing is installed without asking, and
@@ -55,9 +55,9 @@ everything except processor and motherboard temperature works without it. See
 
 The only component BBSpecs can't carry inside itself is the **Microsoft Edge WebView2
 Runtime**, which it draws its display into. That ships with Windows 11 and with
-Microsoft Edge on Windows 10, so virtually every PC already has it — and on the rare
-one that doesn't, BBSpecs says so on launch and offers to open the download page
-rather than closing without a word.
+Microsoft Edge on Windows 10, so virtually every PC already has it. On the rare one
+that doesn't, BBSpecs says so on launch and offers to open the download page rather
+than closing without a word.
 
 ### Linux
 
@@ -88,7 +88,7 @@ rather than failing silently:
 ## Why it asks for Administrator / root
 
 Temperature sensors sit behind a privilege wall on both platforms. Without elevation
-BBSpecs still runs and still shows your specs — you just get blanks where the
+BBSpecs still runs and still shows your specs. You just get blanks where the
 temperatures should be, and a banner explaining it with a button to restart properly.
 
 |                             | Normal user | Administrator / root |
@@ -109,7 +109,7 @@ Windows keeps them behind the sensor driver, which requires elevation.
 ## Optional extras on Linux
 
 BBSpecs reads nearly everything straight from `/proc` and `/sys`, which need nothing
-installed. A few readings come from standard tools, and each one is optional — if it
+installed. A few readings come from standard tools, and each one is optional. If it
 isn't there, that row shows a dash instead.
 
 | Tool         | Adds                                          | Usually in package |
@@ -147,7 +147,7 @@ Two things touch the network, both deliberate and both visible:
   `ifconfig.co`, `ipinfo.io` or `ipify.org`) what address the internet sees.
 
 There's also a **Privacy** toggle in the top-right that blanks out serial numbers,
-IP addresses, MAC addresses and your Wi-Fi network name — worth a click before you
+IP addresses, MAC addresses and your Wi-Fi network name. Worth a click before you
 screenshot anything.
 
 ---
@@ -161,13 +161,13 @@ git clone https://github.com/<owner>/BBSpecs.git
 cd BBSpecs
 ```
 
-**Windows** — produces `dist\BBSpecs-<version>-win-x64.exe`:
+**Windows**, producing `dist\BBSpecs-<version>-win-x64.exe`:
 
 ```powershell
 .\build\build-windows.ps1
 ```
 
-**Linux** — produces `dist/BBSpecs-<version>-linux-x64` plus the installer:
+**Linux**, producing `dist/BBSpecs-<version>-linux-x64` plus the installer:
 
 ```bash
 ./build/build-linux.sh
@@ -191,7 +191,7 @@ dotnet build src/BBSpecs -p:BBSpecsTarget=net9.0-windows   # the Windows code, f
 ### Signing the release
 
 Windows shows **Publisher: Unknown** on the Administrator prompt for any unsigned
-program, and no amount of metadata changes that — it reads the Authenticode
+program, and no amount of metadata changes that. It reads the Authenticode
 signature, not the version resource. To show *BOSSx* there you need a code-signing
 certificate issued to BOSSx. The same signature is what eventually clears the
 SmartScreen "unrecognised app" warning, which matters more for a download.
@@ -201,7 +201,7 @@ open-source projects for free. Their conditions, and where BBSpecs stands:
 
 | Condition | Status |
 | --------- | ------ |
-| OSI-approved licence, no commercial dual-licensing | MIT — see `LICENSE` |
+| OSI-approved licence, no commercial dual-licensing | MIT, see `LICENSE` |
 | Publicly available codebase | needs the repository to be public |
 | Actively maintained | yes |
 | Already released in the form to be signed | needs one public GitHub release |
@@ -213,7 +213,7 @@ PawnIO is GPL-2.0, so it is open source, but it is a third-party binary this
 repository does not build. If SignPath objects, the options are to fetch PawnIO
 on demand instead of bundling it, or to buy a certificate outright.
 
-Signing runs in CI rather than locally, which is the point — the certificate
+Signing runs in CI rather than locally, which is the point. The certificate
 never touches a developer machine. `.github/workflows/release.yml` builds both
 platforms on a tag and has the SignPath step ready to uncomment.
 
@@ -248,7 +248,7 @@ old fast while working on the front-end. `-p:Elevate=false` leaves it out:
 dotnet build src\BBSpecs -p:Elevate=false -p:PublishSingleFile=false -p:SelfContained=false
 ```
 
-The app then runs unelevated and shows its own "some readings are unavailable" banner —
+The app then runs unelevated and shows its own "some readings are unavailable" banner,
 which is exactly what a user without Administrator rights sees, so it's worth testing
 anyway. The build scripts never pass the flag, so releases always ship with it.
 
@@ -285,7 +285,7 @@ src/BBSpecs/
   web/                    The interface: HTML, CSS and one JavaScript file
 ```
 
-The app is a native window hosting a webview — the same approach VS Code, Discord and
+The app is a native window hosting a webview, the same approach VS Code, Discord and
 Spotify use. The C# side collects a full snapshot once a second on a background thread
 and hands it to the page as JSON; the page patches the DOM in place so scroll position
 and animations survive every update.
@@ -297,7 +297,7 @@ carries code it could never run.
 
 1. Add the field to `Models/Snapshot.cs`.
 2. Fill it in both `Platform/Windows/WindowsHardware.cs` and
-   `Platform/Linux/LinuxHardware.cs` — leaving it null on one platform is fine, the
+   `Platform/Linux/LinuxHardware.cs`. Leaving it null on one platform is fine, the
    interface renders a dash.
 3. Render it in `web/app.js`.
 4. Bump `<Version>` in `src/BBSpecs/BBSpecs.csproj` and add a line to `CHANGELOG.md`.
@@ -309,7 +309,7 @@ needs editing.
 
 ## Licence and credits
 
-BBSpecs is released under the **MIT License** — see [`LICENSE`](LICENSE), which
+BBSpecs is released under the **MIT License**. See [`LICENSE`](LICENSE), which
 also lists every third-party component and its terms.
 
 Set in [Geist Pixel](https://github.com/vercel/geist-pixel-font) by Vercel in
