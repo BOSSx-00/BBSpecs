@@ -1,0 +1,129 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    BBSpecs targets Windows and Linux from one source tree.
+
+    The target framework follows the machine doing the build: Windows gets
+    net9.0-windows (which unlocks WMI and the LibreHardwareMonitor sensor
+    library), Linux gets plain net9.0 and reads /proc, /sys and a handful of
+    standard command-line tools instead. Only the matching Platform\ folder is
+    compiled, so neither build carries code it cannot run.
+  -->
+
+  <PropertyGroup>
+    <!--
+      BBSpecsTarget can be overridden to compile-check the other platform's code
+      from either host, e.g. `dotnet build -p:BBSpecsTarget=net9.0` on Windows.
+      Passing it as a global property means restore and build agree on the target.
+    -->
+    <BBSpecsTarget Condition="'$(BBSpecsTarget)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">net9.0-windows</BBSpecsTarget>
+    <BBSpecsTarget Condition="'$(BBSpecsTarget)' == ''">net9.0</BBSpecsTarget>
+    <TargetFramework>$(BBSpecsTarget)</TargetFramework>
+
+    <OutputType>WinExe</OutputType>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>BBSpecs</AssemblyName>
+    <RootNamespace>BBSpecs</RootNamespace>
+
+    <!-- ===== SINGLE SOURCE OF TRUTH FOR THE APP VERSION ===== -->
+    <!-- Bump this for every fix/feature. It shows in the window header. -->
+    <Version>0.7.0</Version>
+    <!-- ====================================================== -->
+
+    <Product>BBSpecs</Product>
+    <Company>BOSSx</Company>
+    <Authors>BOSSx</Authors>
+    <Description>A friendly, simplified hardware monitor for people who just want to know what's in their PC.</Description>
+    <Copyright>Copyright © BOSSx</Copyright>
+
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugType>embedded</DebugType>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!--
+      Ship as ONE double-clickable file.
+
+      SelfContained bundles the .NET runtime, so nobody needs to install anything
+      first. IncludeAllContentForSelfExtract pulls the web/ folder and the icon
+      into the executable too — the runtime unpacks them beside the app on launch,
+      so AppContext.BaseDirectory still finds them exactly as in a normal build.
+    -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- Trimming would strip the reflection the sensor and WMI layers rely on. -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <!-- Platform APIs are reached through guarded, per-target files. -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <ApplicationIcon>Assets\bbspecs.ico</ApplicationIcon>
+    <DefineConstants>$(DefineConstants);BBSPECS_WINDOWS</DefineConstants>
+
+    <!--
+      The manifest is what makes Windows ask for Administrator on launch.
+      While developing the interface that means a UAC prompt on every rebuild,
+      so `-p:Elevate=false` leaves it out. The app then runs unelevated and shows
+      its own "some readings are unavailable" banner, which is the same thing a
+      user without Administrator rights would see — useful to test anyway.
+      Release builds ship with it; the build scripts never pass the flag.
+    -->
+    <ApplicationManifest Condition="'$(Elevate)' != 'false'">app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net9.0-windows'">
+    <DefineConstants>$(DefineConstants);BBSPECS_LINUX</DefineConstants>
+  </PropertyGroup>
+
+  <!-- ─────────────────────────── shared packages ─────────────────────────── -->
+  <ItemGroup>
+    <PackageReference Include="Photino.NET" Version="4.0.16" />
+  </ItemGroup>
+
+  <!-- ───────────────────── Windows-only packages and code ────────────────── -->
+  <!--
+    The PawnIO installer rides along on Windows only. Reading a processor's
+    temperature needs a kernel driver, and carrying the official installer means
+    the user never has to go and find one. It is never run without being asked.
+    See Assets\PawnIO\PawnIO-NOTICE.txt for its licence and source.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <Content Include="Assets\PawnIO\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Assets\PawnIO\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
+    <Compile Remove="Platform\Linux\**\*.cs" />
+  </ItemGroup>
+
+  <!-- ────────────────────────── Linux-only code ──────────────────────────── -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net9.0-windows'">
+    <Compile Remove="Platform\Windows\**\*.cs" />
+  </ItemGroup>
+
+  <!-- ──────────────────────────── web front-end ──────────────────────────── -->
+  <ItemGroup>
+    <Content Include="web\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>web\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+    <!-- The logo lives in the repo's img/ folder; copy it next to the web assets -->
+    <Content Include="..\..\img\bbspecs_logo.png">
+      <Link>web\logo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\**\*" Exclude="Assets\PawnIO\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Assets\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+
+</Project>
+
+

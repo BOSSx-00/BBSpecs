@@ -1,0 +1,65 @@
+MIT License
+
+Copyright (c) 2026 BOSSx
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================================
+THIRD-PARTY COMPONENTS
+================================================================================
+
+BBSpecs is MIT licensed. It ships with the following third-party components,
+each under its own licence. None of them change the licence of BBSpecs itself.
+
+LibreHardwareMonitorLib
+    Mozilla Public License 2.0
+    https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
+    Reads hardware sensors on Windows. MPL-2.0 is file-level copyleft: it
+    covers its own files only, and places no conditions on BBSpecs.
+
+Photino.NET
+    Apache License 2.0
+    https://github.com/tryphotino/photino.NET
+    The native window that hosts the interface on Windows and Linux.
+
+Geist Pixel
+    SIL Open Font License 1.1
+    Copyright (c) 2023 Vercel, in collaboration with basement.studio
+    https://github.com/vercel/geist-pixel-font
+    The typeface. Bundled as a font file; the OFL places no conditions on
+    software that merely displays text in it.
+    Full text: src/BBSpecs/web/fonts/OFL-GeistPixel.txt
+
+PawnIO (installer bundled on Windows only)
+    GNU General Public License 2.0 or later, with a linking exception
+    https://github.com/namazso/PawnIO
+    https://github.com/namazso/PawnIO.Setup
+    The kernel driver that reads processor temperature. BBSpecs ships the
+    official installer unmodified and offers to run it; it is never installed
+    without being asked.
+
+    The copyright holders grant an exception permitting combination with
+    independent modules that communicate with PawnIO solely through its device
+    IO control interface. BBSpecs uses PawnIO only through that interface, via
+    LibreHardwareMonitorLib, so BBSpecs is an independent work and is not a
+    derivative of PawnIO. Its GPL terms do not extend to BBSpecs.
+
+    Source, checksum and signature details:
+    src/BBSpecs/Assets/PawnIO/PawnIO-NOTICE.txt

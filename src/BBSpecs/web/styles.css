@@ -1,0 +1,771 @@
+/* ==========================================================================
+   BBSpecs — BOSSx palette
+   Dark grey surfaces, #ff1f3d for titles and trim, white body text, and a
+   traffic-light trio (green / yellow / red) reserved strictly for health.
+   Set in Geist Pixel, which ships inside the app — nothing is fetched from the web.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("fonts/GeistPixel-Square.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  /* surfaces */
+  --bg:           #0b0c0d;
+  --surface:      #121314;
+  --surface-2:    #17181a;
+  --surface-3:    #1f2023;
+  --line:         #292a2e;
+  --line-soft:    #1d1e21;
+
+  /* brand */
+  --brand:        #ff1f3d;
+  --brand-dim:    #c4162f;
+  --brand-glow:   rgba(255, 31, 61, .14);
+
+  /* text */
+  --text:         #ffffff;
+  --muted:        #9b9da4;
+  --muted-dim:    #6d6f76;
+
+  /* health — the only place these colours are allowed */
+  --green:        #21d662;
+  --yellow:       #ffc61a;
+  --orange:       #ff8a1f;
+  --red:          #ff2d2d;
+
+  --radius:       10px;
+  --radius-sm:    6px;
+  --appbar-h:     54px;
+
+  --shadow: 0 2px 14px rgba(0, 0, 0, .55);
+
+  /* Geist Pixel is the whole typeface; the rest of the stack only matters if the
+     bundled file somehow fails to load. */
+  --font: "Geist Pixel", "Cascadia Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+  --font-display: var(--font);
+  --mono: var(--font);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+}
+
+::selection { background: var(--brand); color: #fff; }
+
+/* ───────────────────── brand bar (logo, name, tabs) ────────────────────── */
+
+.appbar {
+  height: var(--appbar-h);
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  background: linear-gradient(180deg, #121315 0%, #0d0e0f 100%);
+  border-bottom: 1px solid var(--brand);
+  padding: 0 12px;
+  flex: 0 0 auto;
+}
+
+.appbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-right: 18px;
+  margin-right: 6px;
+  border-right: 1px solid var(--line-soft);
+  flex: 0 0 auto;
+}
+
+.appbar__logo { width: 30px; height: 30px; display: block; }
+
+.appbar__name {
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--brand);
+}
+
+.appbar__dash { color: var(--muted-dim); font-size: 14px; }
+.appbar__version { color: var(--muted); font-size: 14px; }
+
+.appbar__beta {
+  align-self: center;
+  margin-left: 2px;
+  padding: 1px 6px 2px;
+  border: 1px solid var(--brand);
+  border-radius: 4px;
+  color: var(--brand);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  line-height: 1.2;
+}
+
+.privacy {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 12px;
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: .3px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s, background .12s;
+}
+.privacy:hover { color: var(--text); border-color: var(--muted-dim); }
+.privacy.is-on {
+  color: var(--brand);
+  border-color: var(--brand);
+  background: var(--brand-glow);
+}
+
+/* ───────────────────────────────── tabs ────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  position: relative;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: .6px;
+  padding: 0 17px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .12s, text-shadow .12s;
+}
+.tab:hover { color: var(--text); }
+.tab.is-active {
+  color: var(--brand);
+}
+.tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 11px; right: 11px; bottom: 0;
+  height: 2px;
+  background: var(--brand);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ──────────────────────────────── layout ──────────────────────────────── */
+
+.view {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 18px 20px 28px;
+}
+
+.view::-webkit-scrollbar { width: 11px; }
+.view::-webkit-scrollbar-track { background: transparent; }
+.view::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 99px;
+  border: 3px solid var(--bg);
+}
+.view::-webkit-scrollbar-thumb:hover { background: #303237; }
+
+/*
+  auto-fit, not auto-fill: auto-fill keeps empty tracks around, which left cards
+  stranded at two-thirds width on a wide window instead of filling it.
+*/
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  margin-bottom: 14px;
+}
+.grid--wide { grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); }
+.grid--full { grid-template-columns: 1fr; }
+
+/* ──────────────────────────────── cards ───────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--line-soft);
+  background: linear-gradient(180deg, rgba(255,255,255,.018), transparent);
+}
+
+.card__title {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+.card__sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: auto;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card__body { padding: 13px 15px 15px; flex: 1; min-width: 0; }
+.card__body + .card__body { border-top: 1px solid var(--line-soft); }
+
+.headline {
+  font-size: 18px;
+  line-height: 1.2;
+  margin-bottom: 1px;
+  word-break: break-word;
+}
+.headline--sm { font-size: 16px; }
+
+.subline { font-size: 13px; color: var(--muted); margin-bottom: 11px; }
+
+/* ──────────────────────────── stat rows ───────────────────────────────── */
+
+.stats { display: flex; flex-direction: column; }
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 14px;
+}
+.stat:last-child { border-bottom: 0; }
+
+.stat__k { color: var(--muted); flex: 0 0 auto; min-width: 128px; }
+.stat__v {
+  color: var(--text);
+  margin-left: auto;
+  text-align: right;
+  word-break: break-word;
+  user-select: text;
+}
+.stat__v--mono { font-size: 12px; }
+.stat__v--dim { color: var(--muted); }
+
+/* ─────────────── health indicators: glowing text, nothing else ─────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* no chip, no border, no background — the colour is the indicator */
+}
+
+/*
+  The only glow in the interface, reserved for health readings.
+
+  Three stacked shadows rather than one: a bright, tight core that keeps the
+  letterforms crisp, then two progressively wider and fainter halos. That
+  falloff is what reads as neon — a single wide blur at high opacity smears the
+  text, and a single tight one barely registers.
+
+  Each tier sets --glow to its own colour channels so one set of keyframes can
+  serve all four, rather than four near-identical copies.
+*/
+.pill--excellent, .pill--good,
+.hero__label.tone--excellent, .hero__label.tone--good { --glow: 33, 214, 98; }
+.pill--ok,    .hero__label.tone--ok    { --glow: 255, 198, 26; }
+.pill--aging, .hero__label.tone--aging { --glow: 255, 138, 31; }
+.pill--poor,  .hero__label.tone--poor  { --glow: 255, 45, 45; }
+
+.pill--excellent, .pill--good, .pill--ok, .pill--aging, .pill--poor {
+  animation: electric 3.8s ease-in-out infinite;
+}
+
+/* Slightly longer, so the headline drifts out of phase with the small labels
+   instead of everything pulsing in lockstep, which looks mechanical. */
+.hero__label.tone--excellent, .hero__label.tone--good,
+.hero__label.tone--ok, .hero__label.tone--aging, .hero__label.tone--poor {
+  animation: electric 4.9s ease-in-out infinite;
+}
+
+/*
+  Deliberately uneven stops. A smooth sine reads as breathing; real electric
+  light sits mostly steady and drops for an instant, so the two quick dips at
+  22% and 73% are what sell it. The letters themselves never change opacity —
+  only the halo around them — so text stays fully legible throughout.
+*/
+@keyframes electric {
+  0%, 100% {
+    text-shadow: 0 0 4px  rgba(var(--glow), .58),
+                 0 0 11px rgba(var(--glow), .32),
+                 0 0 22px rgba(var(--glow), .15);
+  }
+  18% {
+    text-shadow: 0 0 5px  rgba(var(--glow), .78),
+                 0 0 13px rgba(var(--glow), .46),
+                 0 0 26px rgba(var(--glow), .24);
+  }
+  22% {
+    text-shadow: 0 0 3px  rgba(var(--glow), .50),
+                 0 0 9px  rgba(var(--glow), .26),
+                 0 0 18px rgba(var(--glow), .12);
+  }
+  27% {
+    text-shadow: 0 0 5px  rgba(var(--glow), .80),
+                 0 0 14px rgba(var(--glow), .48),
+                 0 0 27px rgba(var(--glow), .26);
+  }
+  55% {
+    text-shadow: 0 0 4px  rgba(var(--glow), .62),
+                 0 0 11px rgba(var(--glow), .35),
+                 0 0 23px rgba(var(--glow), .17);
+  }
+  70% {
+    text-shadow: 0 0 6px  rgba(var(--glow), .86),
+                 0 0 15px rgba(var(--glow), .52),
+                 0 0 29px rgba(var(--glow), .30);
+  }
+  74% {
+    text-shadow: 0 0 3px  rgba(var(--glow), .54),
+                 0 0 10px rgba(var(--glow), .28),
+                 0 0 19px rgba(var(--glow), .13);
+  }
+}
+
+.pill--excellent, .pill--good { color: var(--green); }
+.pill--ok                     { color: var(--yellow); }
+.pill--aging                  { color: var(--orange); }
+.pill--poor                   { color: var(--red); }
+.pill--unknown                { color: var(--muted); }
+
+/* Counts and labels aren't health readings, so they don't glow. */
+.pill--plain {
+  color: var(--muted);
+  letter-spacing: .6px;
+  text-transform: none;
+  font-size: 13px;
+}
+
+.pill--brand {
+  color: var(--brand);
+  letter-spacing: .8px;
+}
+
+.verdict-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.45;
+  user-select: text;
+}
+
+/* ──────────────────────────────── bars ───────────────────────────────── */
+
+.bar {
+  height: 7px;
+  border-radius: 99px;
+  background: var(--surface-3);
+  overflow: hidden;
+  margin: 6px 0 4px;
+}
+.bar__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--brand);
+  transition: width .45s cubic-bezier(.4, 0, .2, 1), background-color .3s;
+  min-width: 2px;
+}
+.bar__fill--excellent, .bar__fill--good { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+.bar__fill--ok    { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+.bar__fill--aging { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+.bar__fill--poor  { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.bar-label strong { color: var(--text); font-weight: 400; }
+
+.bar-block { margin-bottom: 11px; }
+.bar-block:last-child { margin-bottom: 0; }
+
+/* ─────────────────────────────── gauges ───────────────────────────────── */
+
+.gauges {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.gauge { text-align: center; flex: 1 1 100px; min-width: 100px; }
+
+.gauge__ring { position: relative; width: 104px; height: 104px; margin: 0 auto; }
+.gauge__ring svg { transform: rotate(-90deg); display: block; }
+.gauge__track { fill: none; stroke: var(--surface-3); stroke-width: 8; }
+.gauge__arc {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .5s cubic-bezier(.4,0,.2,1), stroke .35s;
+}
+.gauge__arc--excellent, .gauge__arc--good { stroke: var(--green); }
+.gauge__arc--ok    { stroke: var(--yellow); }
+.gauge__arc--aging { stroke: var(--orange); }
+.gauge__arc--poor  { stroke: var(--red); }
+
+.gauge__mid { position: absolute; inset: 0; display: grid; place-content: center; }
+
+.gauge__value { font-size: 23px; line-height: 1; }
+.gauge__unit { font-size: 12px; color: var(--muted); }
+.gauge__name {
+  margin-top: 5px;
+  font-size: 14px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* A reading this machine doesn't offer: dimmed and labelled, never a dead dial. */
+.gauge--na .gauge__ring { opacity: .35; }
+.gauge--na .gauge__value { font-size: 16px; color: var(--muted-dim); }
+.gauge--na .gauge__unit { display: none; }
+.gauge__na { font-size: 11px; color: var(--muted-dim); margin-top: 2px; line-height: 1.2; }
+
+/* ──────────────────────────── overall hero ───────────────────────────── */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 18px 20px;
+  flex-wrap: wrap;
+}
+
+.hero__score { position: relative; width: 128px; height: 128px; flex: 0 0 auto; }
+.hero__score svg { transform: rotate(-90deg); display: block; }
+.hero__score .gauge__track { stroke-width: 9; }
+.hero__score .gauge__arc  { stroke-width: 9; }
+
+.hero__scoremid { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.hero__num { font-size: 34px; line-height: 1; }
+.hero__outof { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.hero__text { flex: 1 1 260px; min-width: 240px; }
+.hero__label { font-size: 26px; line-height: 1.1; margin-bottom: 5px; }
+.hero__reason { color: var(--muted); font-size: 14px; line-height: 1.4; max-width: 70ch; user-select: text; }
+.hero__meta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 11px; align-items: center; }
+
+.tone--excellent { color: var(--green); }
+.tone--good      { color: var(--green); }
+.tone--ok        { color: var(--yellow); }
+.tone--aging     { color: var(--orange); }
+.tone--poor      { color: var(--red); }
+.tone--unknown   { color: var(--muted); }
+
+/* ──────────────────────────── notes lists ────────────────────────────── */
+
+.notes { display: flex; flex-direction: column; gap: 7px; }
+
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  user-select: text;
+}
+.note__dot {
+  flex: 0 0 auto;
+  width: 7px; height: 7px;
+  margin-top: 8px;
+  border-radius: 50%;
+}
+.note--good .note__dot { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.note--warn .note__dot { background: var(--orange); box-shadow: 0 0 7px var(--orange); }
+.note strong { color: var(--text); font-weight: 400; }
+
+.empty { color: var(--muted-dim); font-size: 13px; }
+
+/* ───────────────────────────── core grid ─────────────────────────────── */
+
+.cores {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+}
+
+.core {
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+.core__top { display: flex; align-items: center; gap: 7px; margin-bottom: 2px; }
+.core__name { font-size: 13px; letter-spacing: .6px; color: var(--muted); }
+.core__dot { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; }
+.core__dot--good { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.core__dot--warm { background: var(--yellow); box-shadow: 0 0 7px var(--yellow); }
+.core__dot--hot  { background: var(--red);    box-shadow: 0 0 7px var(--red); }
+.core__dot--unknown { background: var(--muted-dim); }
+
+.core__temp { font-size: 17px; line-height: 1.15; }
+.core__clock { font-size: 12px; color: var(--muted); }
+.core .bar { height: 5px; margin: 5px 0 0; }
+
+/* ───────────────────────────── volumes ───────────────────────────────── */
+
+.volume {
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  margin-bottom: 8px;
+}
+.volume:last-child { margin-bottom: 0; }
+
+/* A volume opens in the file manager, so it has to look like it does something. */
+.volume--open { cursor: pointer; transition: border-color .12s, background .12s; }
+.volume--open:hover,
+.volume--open:focus-visible {
+  border-color: var(--brand);
+  background: var(--surface-3);
+  outline: none;
+}
+
+.volume__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  color: var(--brand);
+  font-size: 12px;
+  letter-spacing: .5px;
+  opacity: 0;
+  transition: opacity .12s;
+}
+.volume--open:hover .volume__open,
+.volume--open:focus-visible .volume__open { opacity: 1; }
+
+.volume__top { display: flex; align-items: baseline; gap: 9px; margin-bottom: 1px; }
+.volume__letter { font-size: 16px; color: var(--brand); min-width: 30px; }
+.volume__label { font-size: 14px; }
+.volume__fs { font-size: 12px; color: var(--muted-dim); margin-left: auto; }
+
+/* ───────────────────── one drive gets exactly one card ───────────────── */
+
+.drive__top { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+.drive__facts { flex: 1 1 250px; min-width: 230px; }
+.drive__dials { flex: 0 0 auto; }
+.drive__dials .gauges { justify-content: flex-start; gap: 6px; }
+.drive__dials .gauge { flex: 0 0 104px; min-width: 104px; }
+
+.drive__split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.section-label {
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  margin-bottom: 7px;
+}
+
+/* ────────────────────────── signal strength ──────────────────────────── */
+
+.signal { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
+.signal__bar { width: 5px; border-radius: 1.5px; background: var(--surface-3); }
+.signal__bar:nth-child(1) { height: 25%; }
+.signal__bar:nth-child(2) { height: 45%; }
+.signal__bar:nth-child(3) { height: 65%; }
+.signal__bar:nth-child(4) { height: 82%; }
+.signal__bar:nth-child(5) { height: 100%; }
+.signal__bar.is-lit--excellent, .signal__bar.is-lit--good { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.signal__bar.is-lit--ok    { background: var(--yellow); box-shadow: 0 0 7px var(--yellow); }
+.signal__bar.is-lit--aging { background: var(--orange); box-shadow: 0 0 7px var(--orange); }
+.signal__bar.is-lit--poor  { background: var(--red);    box-shadow: 0 0 7px var(--red); }
+
+/* ─────────────────────────── misc controls ───────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--brand);
+  background: var(--brand-glow);
+  color: var(--brand);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: .6px;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.btn:hover { background: var(--brand); color: #fff; }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn:disabled:hover { background: var(--brand-glow); color: var(--brand); }
+
+.btn--done {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(33, 214, 98, .12);
+}
+.btn--done:hover { background: rgba(33, 214, 98, .2); color: var(--green); }
+
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.toggle-row:hover { color: var(--text); }
+.toggle-row__chev { transition: transform .18s; }
+.toggle-row.is-open .toggle-row__chev { transform: rotate(180deg); }
+
+.banner {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 11px 15px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,198,26,.3);
+  background: rgba(255,198,26,.07);
+  color: var(--yellow);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.banner strong {
+  display: block;
+  color: var(--yellow);
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+.banner span { color: var(--muted); }
+
+.masked { letter-spacing: 2px; color: var(--muted-dim); user-select: none; }
+
+/* ───────────────────────── upgrade suggestions ───────────────────────── */
+
+.upgrade {
+  border: 1px solid var(--line-soft);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 11px 13px;
+  margin-bottom: 9px;
+}
+.upgrade:last-child { margin-bottom: 0; }
+.upgrade--high   { border-left-color: var(--red); }
+.upgrade--medium { border-left-color: var(--orange); }
+.upgrade--low    { border-left-color: var(--yellow); }
+
+.upgrade__top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; }
+.upgrade__part { font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-dim); }
+.upgrade__pick { font-size: 16px; color: var(--text); }
+.upgrade__why { font-size: 13px; color: var(--muted); line-height: 1.4; user-select: text; }
+.upgrade__now { font-size: 12px; color: var(--muted-dim); margin-top: 3px; }
+
+/* ──────────────────────────── loading state ──────────────────────────── */
+
+.loading {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
+  padding-bottom: 60px;
+}
+.loading__logo { width: 78px; height: 78px; margin-bottom: 14px; animation: bob 1.8s ease-in-out infinite; }
+.loading__text { font-size: 17px; }
+.loading__hint { color: var(--muted); font-size: 13px; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+
+  /* The animation is the only thing painting the glow, so a static one is
+     needed here or the status text would lose its colour cue entirely. */
+  .pill--excellent, .pill--good, .pill--ok, .pill--aging, .pill--poor,
+  .hero__label.tone--excellent, .hero__label.tone--good,
+  .hero__label.tone--ok, .hero__label.tone--aging, .hero__label.tone--poor {
+    text-shadow: 0 0 4px  rgba(var(--glow), .65),
+                 0 0 12px rgba(var(--glow), .40),
+                 0 0 24px rgba(var(--glow), .20) !important;
+  }
+}

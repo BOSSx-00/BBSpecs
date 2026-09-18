@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+dist/
+build/staging/
+
+# The app icon is generated from img/bbspecs_logo.png by tools/make-icon.ps1,
+# but it is committed so the project builds without running that script first.
+!src/BBSpecs/Assets/bbspecs.ico
+
+# Diagnostic output. These describe the machine they were generated on —
+# serial numbers, addresses, network names — and must never be published.
+snapshot.json
+crash.log
+driver-report.txt
+
+# Editors
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+.DS_Store

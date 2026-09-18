@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--
+  The page is loaded from disk, so sources are listed by scheme rather than by
+  origin ('self' doesn't resolve usefully for file:// documents). Remote loads of
+  every kind are blocked: BBSpecs never fetches anything from the web in the page.
+-->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none';
+               script-src file: 'unsafe-inline';
+               style-src file: 'unsafe-inline';
+               img-src file: data:;
+               font-src file:;
+               connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>BBSpecs</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ──────────────────────── brand bar + tabs ─────────────────────── -->
+  <header class="appbar">
+    <div class="appbar__brand">
+      <img class="appbar__logo" src="logo.png" alt="">
+      <span class="appbar__name">BBSpecs</span>
+      <span class="appbar__dash">-</span>
+      <span class="appbar__version" id="version">v…</span>
+      <span class="appbar__beta">BETA</span>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab is-active" data-tab="overview" type="button">Overview</button>
+      <button class="tab" data-tab="cpu" type="button">Processor</button>
+      <button class="tab" data-tab="gpu" type="button">Graphics</button>
+      <button class="tab" data-tab="drives" type="button">Drives</button>
+      <button class="tab" data-tab="internet" type="button">Internet</button>
+    </nav>
+
+    <button class="privacy is-on" id="privacyToggle" type="button"
+            title="Hide serial numbers, IP addresses and network names — handy before taking a screenshot.">
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="17" height="17">
+        <path d="M12 5c-5 0-9 4.5-9 7s4 7 9 7 9-4.5 9-7-4-7-9-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
+              fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="12" cy="12" r="1.7" fill="currentColor"/>
+      </svg>
+      <span id="privacyLabel">Privacy - Hidden</span>
+    </button>
+  </header>
+
+  <!-- ──────────────────────────── content ──────────────────────────── -->
+  <main class="view" id="view">
+    <div class="loading">
+      <img class="loading__logo" src="logo.png" alt="">
+      <p class="loading__text" id="loadingText">Warming the bottle…</p>
+      <p class="loading__hint">This takes a couple of seconds the first time.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
