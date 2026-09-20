@@ -37,6 +37,8 @@ Two buttons on the Overview do the things people actually want afterwards:
 
 ## Download and run
 
+**[Get the latest release](https://github.com/BOSSx-00/BBSpecs/releases/latest)**
+
 ### Windows
 
 Two downloads, same program. Pick whichever suits you.
@@ -170,166 +172,10 @@ The full policy, including where settings and crash logs are written, is in
 
 ---
 
-## Building from source
+## Working on BBSpecs
 
-You need the [.NET 9 SDK](https://dotnet.microsoft.com/download). Nothing else.
-
-```bash
-git clone https://github.com/<owner>/BBSpecs.git
-cd BBSpecs
-```
-
-**Windows**, producing `dist\BBSpecs-<version>-win-x64.exe`:
-
-```powershell
-.\build\build-windows.ps1
-```
-
-To build the installer as well, producing `dist\BBSpecs-Setup-<version>.exe`.
-This needs [Inno Setup 6](https://jrsoftware.org/isinfo.php), which
-`winget install JRSoftware.InnoSetup` will fetch:
-
-```powershell
-.\build\build-installer.ps1
-```
-
-**Linux**, producing `dist/BBSpecs-<version>-linux-x64` plus the installer:
-
-```bash
-./build/build-linux.sh
-```
-
-Both produce a self-contained single file: the .NET runtime is bundled, so whoever
-downloads it needs nothing installed.
-
-For a quick development build, `dotnet run --project src/BBSpecs` works too.
-
-### Checking the other platform compiles
-
-The target framework follows the machine you're building on, but you can compile-check
-the other side from either host:
-
-```bash
-dotnet build src/BBSpecs -p:BBSpecsTarget=net9.0           # the Linux code, from Windows
-dotnet build src/BBSpecs -p:BBSpecsTarget=net9.0-windows   # the Windows code, from Linux
-```
-
-### Signing the release
-
-Windows shows **Publisher: Unknown** on the Administrator prompt for any unsigned
-program, and no amount of metadata changes that. It reads the Authenticode
-signature, not the version resource. To show *BOSSx* there you need a code-signing
-certificate issued to BOSSx. The same signature is what eventually clears the
-SmartScreen "unrecognised app" warning, which matters more for a download.
-
-BBSpecs is set up for [SignPath Foundation](https://signpath.org), which signs
-open-source projects for free. Their conditions, and where BBSpecs stands:
-
-| Condition | Status |
-| --------- | ------ |
-| OSI-approved licence, no commercial dual-licensing | MIT, see `LICENSE` |
-| Publicly available codebase | needs the repository to be public |
-| Actively maintained | yes |
-| Already released in the form to be signed | needs one public GitHub release |
-| Functionality described on the download page | this README |
-| No proprietary, non-open-source component | see the note below |
-
-The last one deserves attention: BBSpecs bundles the prebuilt PawnIO installer.
-PawnIO is GPL-2.0, so it is open source, but it is a third-party binary this
-repository does not build. If SignPath objects, the options are to fetch PawnIO
-on demand instead of bundling it, or to buy a certificate outright.
-
-Signing runs in CI rather than locally, which is the point. The certificate
-never touches a developer machine. `.github/workflows/release.yml` builds both
-platforms on a tag and has the SignPath step ready to uncomment.
-
-For a certificate you hold yourself, the build signs locally too:
-
-```powershell
-.uilduild-windows.ps1 -SignThumbprint <certificate thumbprint>
-```
-
-or set `BBSPECS_SIGN_THUMBPRINT` once on the build machine. It needs `signtool.exe`
-from the Windows SDK. Without a thumbprint the build still works and says it is
-shipping unsigned.
-
-Roughly what the options cost, cheapest first:
-
-| Route | Notes |
-| ----- | ----- |
-| [Azure Trusted Signing](https://azure.microsoft.com/products/trusted-signing) | Around $10/month, run by Microsoft. Individuals need a verifiable history; organisations need to be registered. |
-| [SignPath Foundation](https://signpath.org) | Free for qualifying open-source projects. |
-| OV certificate (Sectigo, DigiCert, …) | A few hundred a year. Since 2023 the key must live on a hardware token or cloud HSM. |
-| EV certificate | More again, but carries SmartScreen reputation from day one. |
-
-A self-signed certificate does *not* help: the prompt still reads "Unknown" on every
-machine that doesn't already trust it, which is every machine but yours.
-
-### Iterating on the interface
-
-On Windows the Administrator manifest means a UAC prompt on every launch, which gets
-old fast while working on the front-end. `-p:Elevate=false` leaves it out:
-
-```powershell
-dotnet build src\BBSpecs -p:Elevate=false -p:PublishSingleFile=false -p:SelfContained=false
-```
-
-The app then runs unelevated and shows its own "some readings are unavailable" banner,
-which is exactly what a user without Administrator rights sees, so it's worth testing
-anyway. The build scripts never pass the flag, so releases always ship with it.
-
-### Seeing what BBSpecs reads on a given machine
-
-`tools/SnapshotDump` prints one full snapshot to the console and writes the exact JSON
-the interface receives. It's the fastest way to work out why a reading looks wrong on
-hardware you don't have in front of you, and on Linux it also lists which optional
-tools are present.
-
-```bash
-dotnet run --project tools/SnapshotDump
-sudo dotnet run --project tools/SnapshotDump     # Linux, to include the root-only bits
-```
-
-To find out why one particular reading is blank, list every raw sensor the machine
-offers. If a value isn't in that list, the hardware or the driver isn't providing it:
-
-```bash
-dotnet run --project tools/SnapshotDump -- --sensors
-```
-
----
-
-## How it's put together
-
-```
-src/BBSpecs/
-  Program.cs              Window host, collector thread, host/page messaging
-  Models/Snapshot.cs      The shape of everything the interface receives
-  Services/               Shared: verdict engine, network, volumes, naming, JSON
-  Platform/Windows/       WMI, LibreHardwareMonitor, the native Wi-Fi API
-  Platform/Linux/         /proc, /sys, hwmon, and the optional tools above
-  web/                    The interface: HTML, CSS and one JavaScript file
-```
-
-The app is a native window hosting a webview, the same approach VS Code, Discord and
-Spotify use. The C# side collects a full snapshot once a second on a background thread
-and hands it to the page as JSON; the page patches the DOM in place so scroll position
-and animations survive every update.
-
-Only the `Platform/` folder matching the build target is compiled, so neither build
-carries code it could never run.
-
-### Adding a reading
-
-1. Add the field to `Models/Snapshot.cs`.
-2. Fill it in both `Platform/Windows/WindowsHardware.cs` and
-   `Platform/Linux/LinuxHardware.cs`. Leaving it null on one platform is fine, the
-   interface renders a dash.
-3. Render it in `web/app.js`.
-4. Bump `<Version>` in `src/BBSpecs/BBSpecs.csproj` and add a line to `CHANGELOG.md`.
-
-The version in the window title comes from that one `<Version>` property; nothing else
-needs editing.
+Building it yourself, the project layout, and how to add a reading are in
+[BUILDING.md](BUILDING.md).
 
 ---
 
