@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--
+  The page is loaded from disk, so sources are listed by scheme rather than by
+  origin ('self' doesn't resolve usefully for file:// documents). Remote loads of
+  every kind are blocked: BBSpecs never fetches anything from the web in the page.
+-->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none';
+               script-src file: 'unsafe-inline';
+               style-src file: 'unsafe-inline';
+               img-src file: data:;
+               font-src file:;
+               connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>BBSpecs</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ──────────────────────── brand bar + tabs ─────────────────────── -->
+  <header class="appbar">
+    <div class="appbar__brand">
+      <img class="appbar__logo" src="logo.png" alt="" draggable="false">
+      <span class="appbar__name">BBSpecs</span>
+      <span class="appbar__dash">-</span>
+      <span class="appbar__version" id="version">v…</span>
+      <span class="appbar__beta">BETA</span>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab is-active" data-tab="overview" type="button">Overview</button>
+      <button class="tab" data-tab="cpu" type="button">Processor</button>
+      <button class="tab" data-tab="gpu" type="button">Graphics</button>
+      <button class="tab" data-tab="memory" type="button">Memory</button>
+      <button class="tab" data-tab="disks" type="button">Disks</button>
+      <button class="tab" data-tab="drivers" type="button">Drivers</button>
+      <button class="tab" data-tab="internet" type="button">Internet</button>
+    </nav>
+
+    <!-- Settings live behind one control rather than spreading across the bar. -->
+    <div class="menu" id="menu">
+      <button class="menu__button" id="menuButton" type="button"
+              aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="menu__panel" id="menuPanel" hidden>
+        <!--
+          The icons are Lucide, drawn on a 24 unit grid with a 2 unit stroke and
+          rendered at 15px. Every row keeps the same icon slot, so all the text
+          in the menu sits in one column.
+        -->
+        <div class="menu__label">Options</div>
+
+        <!--
+          Themes open to the side rather than taking four rows of the menu to
+          themselves. The flyout goes left because the menu is already at the
+          right edge of the window, and opening right would put it off-screen.
+        -->
+        <div class="menu__branch">
+          <button class="menu__item" id="themeToggle" data-action="themeMenu" type="button"
+                  aria-haspopup="true" aria-expanded="false"
+                  title="Change how BBSpecs looks.">
+            <span class="menu__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m14.622 17.897-10.68-2.913"/>
+                <path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"/>
+                <path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"/>
+              </svg>
+            </span>
+            <span>Theme</span>
+            <span class="menu__state" id="themeState">BOSSx</span>
+            <span class="menu__chev" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                   stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+            </span>
+          </button>
+
+          <div class="menu__flyout" id="themePanel" hidden>
+            <button class="menu__item is-checked" data-action="theme" data-set-theme="bossx" type="button">
+              <span>BOSSx</span>
+              <span class="menu__tick" aria-hidden="true">✓</span>
+            </button>
+            <button class="menu__item" data-action="theme" data-set-theme="astro" type="button">
+              <span>Astro</span>
+              <span class="menu__tick" aria-hidden="true">✓</span>
+            </button>
+            <button class="menu__item" data-action="theme" data-set-theme="akbu" type="button">
+              <span>Akbu</span>
+              <span class="menu__tick" aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="menu__item" id="privacyToggle" data-action="privacy" type="button"
+                title="Hide serial numbers, addresses and network names before taking a screenshot.">
+          <span class="menu__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 18a2 2 0 0 0-4 0"/>
+              <path d="m19 11-2.11-6.657a2 2 0 0 0-2.752-1.148l-1.276.61A2 2 0 0 1 12 4H8.5a2 2 0 0 0-1.925 1.456L5 11"/>
+              <path d="M2 11h20"/>
+              <circle cx="17" cy="18" r="3"/>
+              <circle cx="7" cy="18" r="3"/>
+            </svg>
+          </span>
+          <span id="privacyLabel">Privacy</span>
+          <span class="menu__state" id="privacyState">Hidden</span>
+        </button>
+
+        <button class="menu__item" id="notifyToggle" data-action="notifications" type="button"
+                title="Warn me when something gets too hot or a disk runs out of space.">
+          <span class="menu__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.268 21a2 2 0 0 0 3.464 0"/>
+              <path d="M22 8c0-2.3-.8-4.3-2-6"/>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
+              <path d="M4 2C2.8 3.7 2 5.7 2 8"/>
+            </svg>
+          </span>
+          <span>Notifications</span>
+          <span class="menu__state" id="notifyState">Off</span>
+        </button>
+
+        <button class="menu__item" id="startupToggle" data-action="runOnStart" type="button"
+                title="Start BBSpecs with the computer, in the notification area, without opening the window.">
+          <span class="menu__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v10"/>
+              <path d="M18.4 6.6a9 9 0 1 1-12.77.04"/>
+            </svg>
+          </span>
+          <span>Run on start</span>
+          <span class="menu__state" id="startupState">Off</span>
+        </button>
+
+        <div class="menu__rule"></div>
+
+        <button class="menu__item" data-action="checkUpdates" type="button">
+          <span class="menu__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15V3"/>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <path d="m7 10 5 5 5-5"/>
+            </svg>
+          </span>
+          <span>Check for updates</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ──────────────────────────── content ──────────────────────────── -->
+  <main class="view" id="view">
+    <div class="loading">
+      <img class="loading__logo" src="logo.png" alt="" draggable="false">
+      <p class="loading__text" id="loadingText">Warming the bottle…</p>
+      <p class="loading__hint">This takes a couple of seconds the first time.</p>
+    </div>
+  </main>
+
+  <!-- Filled in only when the host reports a newer release. -->
+  <div class="overlay" id="updateLayer" hidden></div>
+
+  <!-- Shown once, the first time BBSpecs is ever opened. -->
+  <div class="overlay overlay--front" id="welcomeLayer" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

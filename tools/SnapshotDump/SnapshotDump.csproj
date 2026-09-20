@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Diagnostic harness. Compiles the BBSpecs data layer as a console app and
+    prints one snapshot, so you can see exactly what BBSpecs reads on a given
+    machine without launching the UI. Handy when a reading looks wrong on
+    hardware we don't have, and for checking a fresh Linux box.
+
+        dotnet run  (from tools/SnapshotDump)
+        sudo dotnet run   on Linux, to include the root-only readings
+  -->
+
+  <PropertyGroup>
+    <BBSpecsTarget Condition="'$(BBSpecsTarget)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">net9.0-windows</BBSpecsTarget>
+    <BBSpecsTarget Condition="'$(BBSpecsTarget)' == ''">net9.0</BBSpecsTarget>
+    <TargetFramework>$(BBSpecsTarget)</TargetFramework>
+
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>BBSpecs.Tools</RootNamespace>
+    <AssemblyName>SnapshotDump</AssemblyName>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <DefineConstants>$(DefineConstants);BBSPECS_WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net9.0-windows'">
+    <DefineConstants>$(DefineConstants);BBSPECS_LINUX</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
+    <Compile Include="..\..\src\BBSpecs\Platform\Windows\**\*.cs" LinkBase="Platform" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net9.0-windows'">
+    <Compile Include="..\..\src\BBSpecs\Platform\Linux\**\*.cs" LinkBase="Platform" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\BBSpecs\Models\**\*.cs" LinkBase="Models" />
+    <Compile Include="..\..\src\BBSpecs\Services\**\*.cs" LinkBase="Services" />
+    <Compile Include="..\..\src\BBSpecs\GlobalUsings.cs" Link="GlobalUsings.cs" />
+  </ItemGroup>
+
+</Project>

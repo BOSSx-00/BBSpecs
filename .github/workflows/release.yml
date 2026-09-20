@@ -1,0 +1,157 @@
+# Builds the downloadable BBSpecs for both platforms and attaches them to a
+# GitHub release.
+#
+# This also happens to be what SignPath Foundation requires before it will sign
+# anything: releases have to be produced by a traceable CI build from public
+# source, not uploaded from somebody's laptop. Signing slots into the Windows
+# job once the project is approved: see the commented step there.
+
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Read version from the project file
+        id: version
+        shell: pwsh
+        run: |
+          # The .csproj is the single source of truth for the version; the tag
+          # and the release name both follow it rather than repeating it.
+          $xml = [xml](Get-Content src/BBSpecs/BBSpecs.csproj)
+          $version = $xml.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Building $version"
+
+      # Inno Setup builds the wizard. The runners do not carry it, and the
+      # portable build needs nothing extra, so this is the only added step.
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      # Builds the portable single file first, then wraps it. Both land in dist.
+      - name: Build
+        shell: pwsh
+        run: ./build/build-installer.ps1
+
+      # Enable once SignPath has approved the project and the connector is set up.
+      # Signing here rather than locally is the point: the certificate never
+      # touches a developer machine, and SignPath verifies the artifact came from
+      # this workflow on this repository.
+      #
+      # - name: Sign with SignPath
+      #   uses: signpath/github-action-submit-signing-request@v1
+      #   with:
+      #     api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+      #     organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      #     project-slug: bbspecs
+      #     signing-policy-slug: release-signing
+      #     artifact-configuration-slug: windows-exe
+      #     github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      #     wait-for-completion: true
+      #     output-artifact-directory: dist
+
+      - name: Upload
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbspecs-windows
+          path: |
+            dist/BBSpecs-*-win-x64.exe
+            dist/BBSpecs-Setup-*.exe
+          if-no-files-found: error
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Build
+        run: bash ./build/build-linux.sh
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbspecs-linux
+          path: |
+            dist/BBSpecs-*-linux-x64
+            dist/install.sh
+            dist/bbspecs.desktop
+            dist/bbspecs.png
+          if-no-files-found: error
+
+  release:
+    needs: [windows, linux]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Read version from the tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # Written out rather than auto-generated: a visitor needs to know which
+      # file to download, which a list of commits does not tell them. Also
+      # avoids the notes being appended twice if the tag is ever moved.
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          fail_on_unmatched_files: true
+          body: |
+            ## Download
+
+            **Windows, installed.** The usual thing: a wizard, a Start Menu
+            entry, an uninstaller, and an option to start with Windows.
+
+            **[BBSpecs-Setup-${{ steps.version.outputs.version }}.exe](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/BBSpecs-Setup-${{ steps.version.outputs.version }}.exe)**
+
+            **Windows, portable.** One file, nothing installed, runs from
+            wherever you put it:
+
+            **[BBSpecs-${{ steps.version.outputs.version }}-win-x64.exe](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/BBSpecs-${{ steps.version.outputs.version }}-win-x64.exe)**
+
+            Either way there is nothing else to get. The .NET runtime, the
+            interface, the font and the temperature driver are all inside.
+            Windows asks for Administrator because it only lets elevated
+            programs read temperature sensors.
+
+            **Linux**. Download `BBSpecs-${{ steps.version.outputs.version }}-linux-x64`.
+            For a menu entry, put `install.sh`, `bbspecs.desktop` and
+            `bbspecs.png` beside it and run `./install.sh`.
+
+            ```bash
+            chmod +x BBSpecs-${{ steps.version.outputs.version }}-linux-x64
+            ./BBSpecs-${{ steps.version.outputs.version }}-linux-x64
+            ```
+
+            Linux needs a system webview, which most desktops already have:
+            `libwebkit2gtk-4.1-0` on Debian and Ubuntu, `webkit2gtk4.1` on
+            Fedora, `webkit2gtk-4.1` on Arch.
+
+            **Source code (zip)** and **(tar.gz)** are added by GitHub
+            automatically and are not needed to run BBSpecs.
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+            for what changed.

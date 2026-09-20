@@ -1,0 +1,74 @@
+PawnIO: third-party component bundled with BBSpecs
+====================================================
+
+BBSpecs includes the official PawnIO installer (PawnIO_setup.exe, version 2.2.0)
+so that processor temperature works without asking you to hunt down a separate
+download. It is never installed silently: BBSpecs asks first, and declining
+leaves your machine untouched.
+
+WHAT IT IS
+----------
+PawnIO is a scriptable kernel driver that lets programs read hardware registers
+safely. Reading a processor's temperature requires executing a privileged CPU
+instruction (RDMSR), which no ordinary program is allowed to do. That is why
+Task Manager doesn't show CPU temperature either. Every tool that does show it
+installs a driver of this kind.
+
+PawnIO replaces the older WinRing0 driver, which granted unrestricted read and
+write access to physical memory and was consequently added to Microsoft's
+Vulnerable Driver Blocklist. PawnIO runs small sandboxed bytecode modules
+instead, and is not blocklisted.
+
+COPYRIGHT AND LICENCE
+---------------------
+PawnIO is Copyright (c) namazso <admin@namazso.eu> and contributors.
+
+PawnIO is free software, licensed under the GNU General Public License,
+version 2 or (at your option) any later version.
+
+The copyright holders grant a special exception permitting combination of
+PawnIO with independent modules that communicate with PawnIO solely through
+its device IO control interface. BBSpecs uses PawnIO only through that
+interface, via LibreHardwareMonitorLib. BBSpecs is therefore an independent
+work and is not a derivative of PawnIO.
+
+WRITTEN OFFER FOR SOURCE CODE
+-----------------------------
+In accordance with section 3 of the GNU General Public License version 2, the
+complete corresponding source code for the bundled PawnIO binaries is publicly
+available at:
+
+    Driver and libraries   https://github.com/namazso/PawnIO
+    Installer              https://github.com/namazso/PawnIO.Setup
+    Project home           https://pawnio.eu
+
+The exact version bundled here is 2.2.0, matching the release tagged 2.2.0 in
+the PawnIO.Setup repository.
+
+VERIFYING THE BUNDLED BINARY
+----------------------------
+The installer shipped inside BBSpecs is byte-for-byte the official release:
+
+    File     PawnIO_setup.exe
+    Version  2.2.0
+    Source   https://github.com/namazso/PawnIO.Setup/releases/download/2.2.0/PawnIO_setup.exe
+    SHA-256  1F519A22E47187F70A1379A48CA604981C4FCF694F4E65B734AAA74A9FBA3032
+
+That hash is the one published in Microsoft's winget package repository for
+namazso.PawnIO 2.2.0. The file is Authenticode-signed by:
+
+    E=admin@namazso.eu, CN=namazso.eu, O=namazso, L=Debrecen, C=HU
+
+You can confirm both yourself:
+
+    Get-FileHash PawnIO_setup.exe -Algorithm SHA256
+    Get-AuthenticodeSignature PawnIO_setup.exe
+
+REMOVING IT
+-----------
+PawnIO installs as a normal Windows program and can be uninstalled at any time
+from Settings, Apps, Installed apps. BBSpecs keeps working without it; only
+processor and motherboard temperatures go away.
+
+The full text of the GNU General Public License version 2 is available at
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html

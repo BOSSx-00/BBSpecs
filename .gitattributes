@@ -1,0 +1,15 @@
+# Normalise line endings so the repository doesn't show as wholly modified when
+# cloned on a different platform. BBSpecs builds on both.
+* text=auto eol=lf
+
+# Shell scripts must keep LF or they won't run on Linux.
+*.sh text eol=lf
+
+# PowerShell is happiest with CRLF on Windows.
+*.ps1 text eol=crlf
+
+# Binary, never touch.
+*.png binary
+*.ico binary
+*.ttf binary
+*.exe binary

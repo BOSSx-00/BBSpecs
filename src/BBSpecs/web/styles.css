@@ -1,0 +1,1187 @@
+/* ==========================================================================
+   BBSpecs: BOSSx palette
+   Dark grey surfaces, #ff1f3d for titles and trim, white body text, and a
+   traffic-light trio (green / yellow / red) reserved strictly for health.
+   Set in Geist Pixel, which ships inside the app: nothing is fetched from the web.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("fonts/GeistPixel-Square.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  /* surfaces */
+  --bg:           #0b0c0d;
+  --surface:      #121314;
+  --surface-2:    #17181a;
+  --surface-3:    #1f2023;
+  --line:         #292a2e;
+  --line-soft:    #1d1e21;
+
+  /* brand: overridden wholesale by [data-theme] below */
+  --brand:        #ff1f3d;
+  --brand-dim:    #c4162f;
+  --brand-soft:   #ff1f3d;
+  --brand-glow:   rgba(255, 31, 61, .14);
+
+  /* Text drawn on top of the brand colour. A theme whose brand is white has to
+     override this, or a filled button prints white on white. */
+  --on-brand:     #ffffff;
+
+  /* text */
+  --text:         #ffffff;
+  --muted:        #9b9da4;
+  --muted-dim:    #6d6f76;
+
+  /* health: the only place these colours are allowed */
+  --green:        #21d662;
+  --yellow:       #ffc61a;
+  --orange:       #ff8a1f;
+  --red:          #ff2d2d;
+
+  --radius:       4px;
+  --radius-sm:    3px;
+  --appbar-h:     54px;
+
+
+  /* Geist Pixel is the whole typeface; the rest of the stack only matters if the
+     bundled file somehow fails to load. */
+  --font: "Geist Pixel", "Cascadia Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+  --font-display: var(--font);
+  --mono: var(--font);
+}
+
+/*
+  The health trio is deliberately identical in every theme below. Green has to
+  mean fine and red has to mean trouble whatever the paint, so only the brand
+  colours and the surfaces move.
+
+  Each palette is pinned to :root on purpose. Written as a bare
+  [data-theme="..."] it matches any element carrying the attribute, and the
+  buttons in the theme menu used to carry it: every one of them applied its own
+  palette to itself, so the Astro row drew itself in Astro's dark brown on a
+  near black menu and each row lit up a different colour on hover. The buttons
+  use data-set-theme now as well, so the two cannot collide again.
+*/
+
+/*
+  Akbu. Hot pink in place of the red, a lighter pink for trim, and plain greys
+  several steps up from the near-black default. Neutral greys, not tinted ones:
+  a colour cast in the surfaces fights the pink instead of carrying it.
+*/
+:root[data-theme="akbu"] {
+  --bg:           #242424;
+  --surface:      #2c2c2c;
+  --surface-2:    #343434;
+  --surface-3:    #414141;
+  --line:         #4f4f4f;
+  --line-soft:    #383838;
+
+  --brand:        #ff2d95;
+  --brand-dim:    #cc1f74;
+  --brand-soft:   #ff9ed4;
+  --brand-glow:   rgba(255, 45, 149, .14);
+
+  --muted:        #b4b4b4;
+  --muted-dim:    #8a8a8a;
+}
+
+/*
+  Astro. The one light theme: paper and warm brown for the surfaces, brown for
+  the text, and teal everywhere the structure shows. The rules are teal rather
+  than brown on purpose, so the colour runs through the whole page instead of
+  only touching the headings.
+
+  The traffic lights are darkened here and nowhere else. The bright green that
+  reads perfectly on near-black is close to invisible on paper, and a health
+  indicator that cannot be read is worse than no indicator.
+*/
+:root[data-theme="astro"] {
+  --bg:           #f0e6d5;
+  --surface:      #fffdf9;
+  --surface-2:    #f7f0e3;
+  --surface-3:    #e4d7c0;
+  --line:         #97c3c6;
+  --line-soft:    #cfdcd9;
+
+  --brand:        #0f8f88;
+  --brand-dim:    #0a6b66;
+  --brand-soft:   #4aa8b8;
+  --brand-glow:   rgba(15, 143, 136, .12);
+
+  --text:         #3a2f26;
+  --muted:        #6b5a49;
+  --muted-dim:    #94826d;
+
+  --green:        #12833f;
+  --yellow:       #96690a;
+  --orange:       #b3560a;
+  --red:          #c22626;
+}
+
+/*
+  The neon treatment the dark themes use does not survive the move to paper. A
+  glow behind dark text is a smudge rather than a light, and shadows built to
+  sit on near-black look like a printing fault on cream. The colour still
+  carries every bit of the meaning without them.
+
+  Marked important because the reduced-motion rules below set the glow the same
+  way, and a static smudge is no better than a moving one.
+*/
+:root[data-theme="astro"] .pill--excellent,
+:root[data-theme="astro"] .pill--good,
+:root[data-theme="astro"] .pill--ok,
+:root[data-theme="astro"] .pill--aging,
+:root[data-theme="astro"] .pill--poor,
+:root[data-theme="astro"] .hero__label {
+  animation: none !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="astro"] .bar__fill,
+:root[data-theme="astro"] .signal__bar,
+:root[data-theme="astro"] .core__dot,
+:root[data-theme="astro"] .note__dot {
+  box-shadow: none;
+}
+
+:root[data-theme="astro"] .menu__panel,
+:root[data-theme="astro"] .menu__flyout { box-shadow: 0 6px 18px rgba(58, 47, 38, .18); }
+
+:root[data-theme="astro"] .dialog { box-shadow: 0 14px 40px rgba(58, 47, 38, .26); }
+
+/* A dim rule on paper is nearly invisible, so the card edges lean on the
+   stronger teal rather than the soft one. */
+:root[data-theme="astro"] .card { border-color: var(--line); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Nothing in here is a file to be dragged out. Dragging a logo onto the
+   desktop, or ghosting it across the window, only ever looks like a bug. */
+img { -webkit-user-drag: none; user-drag: none; user-select: none; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+}
+
+::selection { background: var(--brand); color: var(--on-brand); }
+
+/* ───────────────────── brand bar (logo, name, tabs) ────────────────────── */
+
+.appbar {
+  height: var(--appbar-h);
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--brand-soft);
+  padding: 0 12px;
+  flex: 0 0 auto;
+}
+
+.appbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-right: 18px;
+  margin-right: 6px;
+  border-right: 1px solid var(--line-soft);
+  flex: 0 0 auto;
+}
+
+.appbar__logo { width: 30px; height: 30px; display: block; }
+
+.appbar__name {
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--brand);
+}
+
+.appbar__dash { color: var(--muted-dim); font-size: 14px; }
+.appbar__version { color: var(--muted); font-size: 14px; }
+
+.appbar__beta {
+  align-self: center;
+  margin-left: 2px;
+  padding: 1px 6px 2px;
+  border: 1px solid var(--brand);
+  border-radius: 4px;
+  color: var(--brand);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  line-height: 1.2;
+}
+
+/* ─────────────────────────── settings menu ─────────────────────────────── */
+
+.menu { position: relative; margin-left: auto; align-self: center; flex: 0 0 auto; }
+
+.menu__button {
+  display: grid;
+  place-content: center;
+  width: 32px; height: 30px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .12s, border-color .12s;
+}
+.menu__button:hover { color: var(--text); }
+.menu__button[aria-expanded="true"] { color: var(--brand); border-color: var(--line); }
+
+.menu__panel {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  z-index: 40;
+  min-width: 254px;
+  padding: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .6);
+}
+.menu__panel[hidden] { display: none; }
+
+.menu__label {
+  padding: 6px 9px 4px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+
+/* A row that opens a list of its own, beside the menu. */
+.menu__branch { position: relative; }
+
+
+.menu__chev {
+  display: grid;
+  place-content: center;
+  margin-left: 4px;
+  margin-right: -2px;
+  color: var(--muted-dim);
+  transition: transform .16s, color .12s;
+}
+.menu__item[aria-expanded="true"] .menu__chev { color: var(--brand); transform: translateX(-2px); }
+
+.menu__flyout {
+  position: absolute;
+  top: -6px;
+  right: calc(100% + 7px);
+  z-index: 1;
+  min-width: 132px;
+  padding: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .6);
+}
+.menu__flyout[hidden] { display: none; }
+
+/* No icon slot in here: every row is a theme name, so the column of empty
+   space a shared slot would leave is just a gap nothing ever fills. */
+.menu__flyout .menu__item { gap: 14px; }
+
+.menu__item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  /* One line per row: a label that wraps makes the menu jump about as states
+     change, and every row here is short enough to fit. */
+  white-space: nowrap;
+}
+.menu__item:hover { background: var(--surface-3); }
+
+.menu__item:disabled { cursor: default; opacity: .55; }
+.menu__item:disabled:hover { background: transparent; }
+
+/* The browser's own focus ring is white, which lands in the middle of a themed
+   menu looking like a rendering fault. Keyboard focus still has to be visible,
+   so it gets one in the theme's own colour instead of being switched off. */
+.menu__item:focus { outline: none; }
+.menu__item:focus-visible {
+  outline: 1px solid var(--brand);
+  outline-offset: -2px;
+}
+
+.menu__icon {
+  display: grid;
+  place-content: center;
+  width: 15px;
+  flex: 0 0 15px;
+  color: var(--muted);
+}
+.menu__item:hover .menu__icon { color: var(--text); }
+
+.menu__state { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.menu__item.is-on .menu__state { color: var(--brand); }
+.menu__item.is-on .menu__icon { color: var(--brand); }
+
+/* The other icons are lit when their setting is on and grey when it is off.
+   Theme has no off, because there is always one, so it is lit permanently.
+   Sits beside the rules above rather than earlier in the file so that hovering
+   it does not put it out while its switched-on neighbours stay lit. */
+.menu__branch > .menu__item .menu__icon,
+.menu__branch > .menu__item .menu__state { color: var(--brand); }
+
+.menu__tick { margin-left: auto; color: var(--brand); visibility: hidden; }
+.menu__item.is-checked .menu__tick { visibility: visible; }
+
+.menu__rule { height: 1px; background: var(--line-soft); margin: 5px 3px; }
+
+/* ───────────────────────────────── tabs ────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  position: relative;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: .6px;
+  padding: 0 17px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .12s, text-shadow .12s;
+}
+.tab:hover { color: var(--text); }
+.tab.is-active {
+  color: var(--brand);
+}
+.tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 11px; right: 11px; bottom: 0;
+  height: 2px;
+  background: var(--brand);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ──────────────────────────────── layout ──────────────────────────────── */
+
+.view {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 18px 20px 28px;
+}
+
+.view::-webkit-scrollbar { width: 11px; }
+.view::-webkit-scrollbar-track { background: transparent; }
+.view::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 99px;
+  border: 3px solid var(--bg);
+}
+.view::-webkit-scrollbar-thumb:hover { background: var(--line); }
+
+/*
+  auto-fit, not auto-fill: auto-fill keeps empty tracks around, which left cards
+  stranded at two-thirds width on a wide window instead of filling it.
+*/
+.grid {
+  display: grid;
+  align-items: start;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  margin-bottom: 14px;
+}
+.grid--wide { grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); }
+/* Two across on any normal window: for the panels worth reading properly. */
+.grid--pair { grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); }
+.grid--full { grid-template-columns: 1fr; }
+
+/* ──────────────────────────────── cards ───────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.card__title {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+.card__sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: auto;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card__body { padding: 13px 15px 15px; flex: 1; min-width: 0; }
+.card__body + .card__body { border-top: 1px solid var(--line-soft); }
+
+.headline {
+  font-size: 18px;
+  line-height: 1.2;
+  margin-bottom: 1px;
+  word-break: break-word;
+}
+.headline--sm { font-size: 16px; }
+
+.subline { font-size: 13px; color: var(--muted); margin-bottom: 11px; }
+
+/* ──────────────────────────── stat rows ───────────────────────────────── */
+
+.stats { display: flex; flex-direction: column; }
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 14px;
+}
+.stat:last-child { border-bottom: 0; }
+
+.stat__k { color: var(--muted); flex: 0 0 auto; min-width: 128px; }
+.stat__v {
+  color: var(--text);
+  margin-left: auto;
+  text-align: right;
+  word-break: break-word;
+  user-select: text;
+}
+.stat__v--mono { font-size: 12px; }
+.stat__v--dim { color: var(--muted); }
+
+/* ─────────────── health indicators: glowing text, nothing else ─────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* no chip, no border, no background: the colour is the indicator */
+}
+
+/*
+  The only glow in the interface, reserved for health readings.
+
+  Three stacked shadows rather than one: a bright, tight core that keeps the
+  letterforms crisp, then two progressively wider and fainter halos. That
+  falloff is what reads as neon: a single wide blur at high opacity smears the
+  text, and a single tight one barely registers.
+
+  Each tier sets --glow to its own colour channels so one set of keyframes can
+  serve all four, rather than four near-identical copies.
+*/
+.pill--excellent, .pill--good,
+.hero__label.tone--excellent, .hero__label.tone--good { --glow: 33, 214, 98; }
+.pill--ok,    .hero__label.tone--ok    { --glow: 255, 198, 26; }
+.pill--aging, .hero__label.tone--aging { --glow: 255, 138, 31; }
+.pill--poor,  .hero__label.tone--poor  { --glow: 255, 45, 45; }
+
+.pill--excellent, .pill--good, .pill--ok, .pill--aging, .pill--poor {
+  animation: electric 3.8s ease-in-out infinite;
+}
+
+/* Slightly longer, so the headline drifts out of phase with the small labels
+   instead of everything pulsing in lockstep, which looks mechanical. */
+.hero__label.tone--excellent, .hero__label.tone--good,
+.hero__label.tone--ok, .hero__label.tone--aging, .hero__label.tone--poor {
+  animation: electric 4.9s ease-in-out infinite;
+}
+
+/*
+  Deliberately uneven stops. A smooth sine reads as breathing; real electric
+  light sits mostly steady and drops for an instant, so the two quick dips at
+  22% and 73% are what sell it. The letters themselves never change opacity,
+  only the halo around them, so text stays fully legible throughout.
+*/
+@keyframes electric {
+  0%, 100% {
+    text-shadow: 0 0 4px  rgba(var(--glow), .58),
+                 0 0 11px rgba(var(--glow), .32),
+                 0 0 22px rgba(var(--glow), .15);
+  }
+  18% {
+    text-shadow: 0 0 5px  rgba(var(--glow), .78),
+                 0 0 13px rgba(var(--glow), .46),
+                 0 0 26px rgba(var(--glow), .24);
+  }
+  22% {
+    text-shadow: 0 0 3px  rgba(var(--glow), .50),
+                 0 0 9px  rgba(var(--glow), .26),
+                 0 0 18px rgba(var(--glow), .12);
+  }
+  27% {
+    text-shadow: 0 0 5px  rgba(var(--glow), .80),
+                 0 0 14px rgba(var(--glow), .48),
+                 0 0 27px rgba(var(--glow), .26);
+  }
+  55% {
+    text-shadow: 0 0 4px  rgba(var(--glow), .62),
+                 0 0 11px rgba(var(--glow), .35),
+                 0 0 23px rgba(var(--glow), .17);
+  }
+  70% {
+    text-shadow: 0 0 6px  rgba(var(--glow), .86),
+                 0 0 15px rgba(var(--glow), .52),
+                 0 0 29px rgba(var(--glow), .30);
+  }
+  74% {
+    text-shadow: 0 0 3px  rgba(var(--glow), .54),
+                 0 0 10px rgba(var(--glow), .28),
+                 0 0 19px rgba(var(--glow), .13);
+  }
+}
+
+.pill--excellent, .pill--good { color: var(--green); }
+.pill--ok                     { color: var(--yellow); }
+.pill--aging                  { color: var(--orange); }
+.pill--poor                   { color: var(--red); }
+.pill--unknown                { color: var(--muted); }
+
+/* Counts and labels aren't health readings, so they don't glow. */
+.pill--plain {
+  color: var(--muted);
+  letter-spacing: .6px;
+  text-transform: none;
+  font-size: 13px;
+}
+
+.pill--brand {
+  color: var(--brand);
+  letter-spacing: .8px;
+}
+
+.verdict-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.45;
+  user-select: text;
+}
+
+/* ──────────────────────────────── bars ───────────────────────────────── */
+
+.bar {
+  height: 7px;
+  border-radius: 99px;
+  background: var(--surface-3);
+  overflow: hidden;
+  margin: 6px 0 4px;
+}
+.bar__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--brand);
+  transition: width .45s cubic-bezier(.4, 0, .2, 1), background-color .3s;
+  min-width: 2px;
+}
+.bar__fill--excellent, .bar__fill--good { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+.bar__fill--ok    { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+.bar__fill--aging { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+.bar__fill--poor  { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.bar-label strong { color: var(--text); font-weight: 400; }
+
+.bar-block { margin-bottom: 11px; }
+.bar-block:last-child { margin-bottom: 0; }
+
+/* ─────────────────────────────── gauges ───────────────────────────────── */
+
+.gauges {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.gauge { text-align: center; flex: 1 1 100px; min-width: 100px; }
+
+.gauge__ring { position: relative; width: 104px; height: 104px; margin: 0 auto; }
+.gauge__ring svg { transform: rotate(-90deg); display: block; }
+.gauge__track { fill: none; stroke: var(--surface-3); stroke-width: 8; }
+.gauge__arc {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .5s cubic-bezier(.4,0,.2,1), stroke .35s;
+}
+.gauge__arc--excellent, .gauge__arc--good { stroke: var(--green); }
+.gauge__arc--ok    { stroke: var(--yellow); }
+.gauge__arc--aging { stroke: var(--orange); }
+.gauge__arc--poor  { stroke: var(--red); }
+
+.gauge__mid { position: absolute; inset: 0; display: grid; place-content: center; }
+
+.gauge__value { font-size: 23px; line-height: 1; }
+.gauge__unit { font-size: 12px; color: var(--muted); }
+.gauge__name {
+  margin-top: 5px;
+  font-size: 14px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* A reading this machine doesn't offer: dimmed and labelled, never a dead dial. */
+.gauge--na .gauge__ring { opacity: .35; }
+.gauge--na .gauge__value { font-size: 16px; color: var(--muted-dim); }
+.gauge--na .gauge__unit { display: none; }
+.gauge__na { font-size: 11px; color: var(--muted-dim); margin-top: 2px; line-height: 1.2; }
+
+/* ──────────────────────────── overall hero ───────────────────────────── */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 18px 20px;
+  flex-wrap: wrap;
+}
+
+.hero__score { position: relative; width: 128px; height: 128px; flex: 0 0 auto; }
+.hero__score svg { transform: rotate(-90deg); display: block; }
+.hero__score .gauge__track { stroke-width: 9; }
+.hero__score .gauge__arc  { stroke-width: 9; }
+
+.hero__scoremid { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.hero__num { font-size: 34px; line-height: 1; }
+.hero__outof { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.hero__text { flex: 1 1 260px; min-width: 240px; }
+.hero__label { font-size: 26px; line-height: 1.1; margin-bottom: 5px; }
+.hero__reason { color: var(--muted); font-size: 14px; line-height: 1.4; max-width: 70ch; user-select: text; }
+.hero__meta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 11px; align-items: center; }
+
+.tone--excellent { color: var(--green); }
+.tone--good      { color: var(--green); }
+.tone--ok        { color: var(--yellow); }
+.tone--aging     { color: var(--orange); }
+.tone--poor      { color: var(--red); }
+.tone--unknown   { color: var(--muted); }
+
+/* ──────────────────────────── notes lists ────────────────────────────── */
+
+.notes { display: flex; flex-direction: column; gap: 7px; }
+
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  user-select: text;
+}
+.note__dot {
+  flex: 0 0 auto;
+  width: 7px; height: 7px;
+  margin-top: 8px;
+  border-radius: 50%;
+}
+.note--good .note__dot { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.note--warn .note__dot { background: var(--orange); box-shadow: 0 0 7px var(--orange); }
+.note strong { color: var(--text); font-weight: 400; }
+
+.empty { color: var(--muted-dim); font-size: 13px; }
+
+/* ───────────────────────────── core grid ─────────────────────────────── */
+
+.cores {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+}
+
+.core {
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+.core__top { display: flex; align-items: center; gap: 7px; margin-bottom: 2px; }
+.core__name { font-size: 13px; letter-spacing: .6px; color: var(--muted); }
+.core__dot { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; }
+.core__dot--good { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.core__dot--warm { background: var(--yellow); box-shadow: 0 0 7px var(--yellow); }
+.core__dot--hot  { background: var(--red);    box-shadow: 0 0 7px var(--red); }
+.core__dot--unknown { background: var(--muted-dim); }
+
+.core__temp { font-size: 17px; line-height: 1.15; }
+.core__clock { font-size: 12px; color: var(--muted); }
+.core .bar { height: 5px; margin: 5px 0 0; }
+
+/* ───────────────────────────── volumes ───────────────────────────────── */
+
+.volume {
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  margin-bottom: 8px;
+}
+.volume:last-child { margin-bottom: 0; }
+
+/* A volume opens in the file manager, so it has to look like it does something. */
+.volume--open { cursor: pointer; transition: border-color .12s, background .12s; }
+.volume--open:hover,
+.volume--open:focus-visible {
+  border-color: var(--brand);
+  background: var(--surface-3);
+  outline: none;
+}
+
+.volume__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  color: var(--brand);
+  font-size: 12px;
+  letter-spacing: .5px;
+  opacity: 0;
+  transition: opacity .12s;
+}
+.volume--open:hover .volume__open,
+.volume--open:focus-visible .volume__open { opacity: 1; }
+
+.volume__top { display: flex; align-items: baseline; gap: 9px; margin-bottom: 1px; }
+.volume__letter { font-size: 16px; color: var(--brand-soft); min-width: 30px; }
+.volume__label { font-size: 14px; }
+.volume__fs { font-size: 12px; color: var(--muted-dim); margin-left: auto; }
+
+/* ───────────────────── one drive gets exactly one card ───────────────── */
+
+.drive__top { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+.drive__facts { flex: 1 1 250px; min-width: 230px; }
+.drive__dials { flex: 0 0 auto; }
+.drive__dials .gauges { justify-content: flex-start; gap: 6px; }
+.drive__dials .gauge { flex: 0 0 104px; min-width: 104px; }
+
+.drive__split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.section-label {
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  margin-bottom: 7px;
+}
+
+/* ────────────────────────── signal strength ──────────────────────────── */
+
+.signal { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
+.signal__bar { width: 5px; border-radius: 1.5px; background: var(--surface-3); }
+.signal__bar:nth-child(1) { height: 25%; }
+.signal__bar:nth-child(2) { height: 45%; }
+.signal__bar:nth-child(3) { height: 65%; }
+.signal__bar:nth-child(4) { height: 82%; }
+.signal__bar:nth-child(5) { height: 100%; }
+.signal__bar.is-lit--excellent, .signal__bar.is-lit--good { background: var(--green);  box-shadow: 0 0 7px var(--green); }
+.signal__bar.is-lit--ok    { background: var(--yellow); box-shadow: 0 0 7px var(--yellow); }
+.signal__bar.is-lit--aging { background: var(--orange); box-shadow: 0 0 7px var(--orange); }
+.signal__bar.is-lit--poor  { background: var(--red);    box-shadow: 0 0 7px var(--red); }
+
+/* ─────────────────────────── misc controls ───────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--brand);
+  background: transparent;
+  color: var(--brand);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: .6px;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.btn:hover { background: var(--brand); color: var(--on-brand); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn:disabled:hover { background: transparent; color: var(--brand); }
+
+.btn--done {
+  border-color: var(--green);
+  color: var(--green);
+}
+.btn--done:hover { background: var(--green); color: #07130b; }
+
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.toggle-row:hover { color: var(--text); }
+.toggle-row__chev { transition: transform .18s; }
+.toggle-row.is-open .toggle-row__chev { transform: rotate(180deg); }
+
+.banner {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 11px 15px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,198,26,.3);
+  background: rgba(255,198,26,.07);
+  color: var(--yellow);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.banner strong {
+  display: block;
+  color: var(--yellow);
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+.banner span { color: var(--muted); }
+
+.masked { letter-spacing: 2px; color: var(--muted-dim); user-select: none; }
+
+/* ───────────────────────── upgrade suggestions ───────────────────────── */
+
+.upgrade {
+  border: 1px solid var(--line-soft);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 11px 13px;
+  margin-bottom: 9px;
+}
+.upgrade:last-child { margin-bottom: 0; }
+.upgrade--high   { border-left-color: var(--red); }
+.upgrade--medium { border-left-color: var(--orange); }
+.upgrade--low    { border-left-color: var(--yellow); }
+
+.upgrade__top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; }
+.upgrade__part { font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-dim); }
+.upgrade__pick { font-size: 16px; color: var(--text); }
+.upgrade__why { font-size: 13px; color: var(--muted); line-height: 1.4; user-select: text; }
+.upgrade__now { font-size: 12px; color: var(--muted-dim); margin-top: 3px; }
+
+/* ─────────────────────────── memory slots ────────────────────────────── */
+
+/*
+  Laid out as the slots themselves rather than as a table, because the question
+  being answered is physical: what is in the machine and what is still free.
+  Empty slots are drawn dashed and at the same size, so a half-populated board
+  looks half-populated at a glance.
+*/
+.slots {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+}
+
+.slot {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 11px 13px 12px;
+  min-height: 116px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slot__name {
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  margin-bottom: 5px;
+}
+.slot__cap { font-size: 21px; line-height: 1.1; }
+.slot__spec { font-size: 13px; color: var(--muted); }
+.slot__warn { font-size: 12px; color: var(--yellow); margin-top: 2px; }
+.slot__maker { font-size: 13px; margin-top: auto; padding-top: 7px; }
+.slot__part {
+  font-size: 11px;
+  color: var(--muted-dim);
+  word-break: break-all;
+  user-select: text;
+}
+
+.slot.is-empty {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+}
+.slot.is-empty .slot__cap {
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+
+/* ──────────────── a disk with nothing on it yet ──────────────────────── */
+
+.claim {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 13px;
+  margin-bottom: 9px;
+}
+.claim__text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+/* ──────────────────────────────── drivers ───────────────────────────── */
+
+.driver {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.driver:last-child { border-bottom: 0; padding-bottom: 0; }
+.driver:first-child { padding-top: 0; }
+
+.driver__top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 3px;
+}
+.driver__name {
+  font-size: 15px;
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.driver__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  user-select: text;
+}
+
+.btn--small {
+  height: 27px;
+  padding: 0 11px;
+  font-size: 13px;
+  margin-top: 9px;
+}
+
+/* ───────────────────────────── update prompt ─────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, .62);
+}
+.overlay[hidden] { display: none; }
+
+/* Sits above the update prompt on the rare launch that raises both. */
+.overlay--front { z-index: 70; }
+
+.dialog__link {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--brand);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color .12s, background .12s;
+}
+.dialog__link:hover { border-color: var(--brand); background: var(--surface-3); }
+.dialog__link small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+.dialog {
+  position: relative;
+  width: min(430px, 100%);
+  padding: 20px 22px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--brand);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .7);
+}
+
+.dialog__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-content: center;
+  width: 26px; height: 26px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-dim);
+  cursor: pointer;
+  transition: color .12s, background .12s;
+}
+.dialog__close:hover { color: var(--text); background: var(--surface-3); }
+
+.dialog__version {
+  font-size: 12px;
+  color: var(--muted-dim);
+  margin: -5px 0 10px;
+  letter-spacing: .4px;
+}
+
+.dialog__title {
+  padding-right: 28px;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: .6px;
+  color: var(--brand);
+  margin-bottom: 9px;
+}
+.dialog__text { font-size: 14px; line-height: 1.5; }
+.dialog__notes {
+  margin-top: 9px;
+  padding: 9px 11px;
+  border-left: 2px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+  user-select: text;
+}
+.dialog__fine { margin-top: 11px; font-size: 12px; color: var(--muted-dim); line-height: 1.45; }
+
+.dialog__actions { display: flex; gap: 9px; margin-top: 18px; }
+
+/* Secondary choice: present, but not competing with the one being recommended. */
+.btn--quiet { border-color: var(--line); color: var(--muted); }
+.btn--quiet:hover { background: var(--surface-3); color: var(--text); }
+
+/* ──────────────────────────── loading state ──────────────────────────── */
+
+.loading {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
+  padding-bottom: 60px;
+}
+.loading__logo { width: 78px; height: 78px; margin-bottom: 14px; animation: bob 1.8s ease-in-out infinite; }
+.loading__text { font-size: 17px; }
+.loading__hint { color: var(--muted); font-size: 13px; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+
+  /* The animation is the only thing painting the glow, so a static one is
+     needed here or the status text would lose its colour cue entirely. */
+  .pill--excellent, .pill--good, .pill--ok, .pill--aging, .pill--poor,
+  .hero__label.tone--excellent, .hero__label.tone--good,
+  .hero__label.tone--ok, .hero__label.tone--aging, .hero__label.tone--poor {
+    text-shadow: 0 0 4px  rgba(var(--glow), .65),
+                 0 0 12px rgba(var(--glow), .40),
+                 0 0 24px rgba(var(--glow), .20) !important;
+  }
+}
