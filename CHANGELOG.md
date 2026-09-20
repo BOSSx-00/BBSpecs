@@ -3,7 +3,7 @@
 Every fix and feature bumps the version, which shows in the window title next to
 the logo: `BBSpecs  -  v<version>`.
 
-The version lives in one place, `<Version>` in `src/BBSpecs/BBSpecs.csproj`, and
+I keep the version in one place, `<Version>` in `src/BBSpecs/BBSpecs.csproj`, and
 the app reads it back from its own assembly at runtime.
 
 ---
@@ -13,58 +13,57 @@ the app reads it back from its own assembly at runtime.
 ### Fixed
 
 - **Uninstalling while BBSpecs was open left the program behind.** Everything
-  else went, the shortcuts, the logon task and the uninstaller itself, and then
-  removal failed on the one file that mattered, leaving BBSpecs.exe in the
-  install folder with nothing left to remove it.
+  else went: the shortcuts, the logon task and the uninstaller itself. Then
+  removal failed on the one file that mattered and left BBSpecs.exe sitting in
+  the install folder with nothing left to remove it.
 
-  Inno's own setting for this is meant to close running applications through
-  the Restart Manager, and did not. That is unsurprising for a copy started by
-  the logon task: it sits in the notification area with no window on screen for
-  the Restart Manager to talk to. The installer now closes a running copy
-  itself, both before installing over one and before removing one.
+  Inno's own setting for this is supposed to close running applications through
+  the Restart Manager, and it didn't. Makes sense once you think about it: a
+  copy started by the logon task sits in the notification area with no window on
+  screen for the Restart Manager to talk to. So I close a running copy myself
+  now, both before installing over one and before removing one.
 
-  It asks rather than forces, so the app saves its settings and takes its tray
-  icon with it, and only insists if that is ignored. It also waits until you
-  have committed, after Install is pressed or removal confirmed, because
-  closing somebody's running application merely because they opened the
-  installer to look at it would be rude. A portable copy is left alone: only
-  the installed name is closed.
+  I ask rather than force, so the app saves its settings and takes its tray icon
+  with it, and I only insist if that gets ignored. I also wait until you have
+  committed, after you press Install or confirm removal, because closing your
+  running app just because you opened the installer to look at it would be rude.
+  Portable copies are left alone: I only close the installed name.
 
 ## 0.9.2
 
 ### Fixed
 
 - **Every row in the theme menu drew itself in its own theme's colours.** The
-  Astro row rendered in Astro's dark brown on a near black menu, which looked
-  like it had been disabled, and each row lit up a different colour on hover.
+  Astro row rendered in Astro's dark brown on a near black menu, which made it
+  look disabled, and every row lit up a different colour on hover.
 
-  The palettes were written as `[data-theme="astro"]`, which matches any
+  I had written the palettes as `[data-theme="astro"]`, which matches any
   element carrying that attribute, and the buttons that pick a theme were
   carrying it too. So each button quietly applied that whole palette to itself
-  and took its text colour from it. The Akbu row escaped only by luck: its
+  and took its text colour from it. The Akbu row only escaped by luck: its
   palette happens not to redefine the text colour.
 
-  Palettes are pinned to `:root` now, because a palette is a property of the
-  page rather than of whatever element happens to name a theme. The buttons use
-  a different attribute as well, so the two cannot collide again.
+  Palettes are pinned to `:root` now, because a palette belongs to the page
+  rather than to whatever element happens to name a theme. I moved the buttons
+  onto a different attribute as well, so the two cannot collide again.
 
 ## 0.9.1
 
 ### Fixed
 
 - **The installer could not launch BBSpecs when it finished.** Ticking "Launch
-  BBSpecs" on the last page produced "CreateProcess failed; code 740. The
+  BBSpecs" on the last page gave you "CreateProcess failed; code 740. The
   requested operation requires elevation."
 
   Inno runs the entries on that final page as the original, non-elevated user,
   on purpose, so that installing something does not leave it running with
   administrator rights. BBSpecs asks for administrator in its own manifest, so
-  starting it that way could only fail. It is launched through the shell now,
-  which reads the manifest and elevates properly: the app starts from the
-  wizard exactly the way it starts from the Start Menu, with its own prompt,
-  rather than inheriting the installer's rights.
+  starting it that way could only ever fail. I launch it through the shell now,
+  which reads the manifest and elevates properly: the app starts from the wizard
+  exactly the way it starts from the Start Menu, with its own prompt, instead of
+  inheriting the installer's rights.
 
-  Everything else the wizard does was already correct: the chosen folder, the
+  Everything else the wizard does was already right. The chosen folder, the
   Start Menu entry, the Add or Remove Programs record and the logon task all
   landed where they should.
 
@@ -76,49 +75,51 @@ the app reads it back from its own assembly at runtime.
   entry, optional desktop shortcut, an optional "start with Windows" tick, and
   an uninstaller in Add or Remove Programs that takes the logon task with it.
 
-  The portable single file is still there and still the first thing on the
-  download page. The two are the same program and neither is second class: one
-  is for people who want BBSpecs to live somewhere, the other for people who
-  want to run it once from their Downloads folder and forget it. Installed, it
-  is always `BBSpecs.exe` in a fixed folder, so a logon task or a shortcut
-  pointing at it never goes stale when a new version arrives.
+  The portable single file is not going anywhere, and it is still the first
+  thing on the download page. They are the same program and I do not treat
+  either as second class: one is for people who want BBSpecs to live somewhere,
+  the other for people who want to run it once out of their Downloads folder and
+  forget about it. Installed, it is always `BBSpecs.exe` in a fixed folder, so a
+  logon task or a shortcut pointing at it never goes stale when a new version
+  lands.
 
 - **Updating knows which of the two it is.** A portable copy still replaces its
   own file. An installed one downloads the new installer and runs it silently
-  instead, because a copy that quietly swapped its own executable would leave
-  Add or Remove Programs reporting a version that is no longer there.
+  instead, because if it quietly swapped its own executable, Add or Remove
+  Programs would sit there reporting a version that is not on the machine any
+  more.
 
 - **A greeting on the first run**, once and never again, with a link to
   bossx.ca.
 
-- **The wizard carries the logo** rather than Inno Setup's generic box and
-  disc, which says nothing about what is being installed. Generated from the
+- **The wizard carries my logo** instead of Inno Setup's generic box and disc,
+  which tells you nothing about what you are installing. I generate it from the
   same logo file the app and its icon come from, so the three cannot drift
-  apart, and produced at two sizes so it stays sharp on a high DPI display.
-  It lives under build/ rather than with the app's own assets: everything in
-  there is compiled into the executable, and installer artwork has no business
-  adding the best part of a megabyte to every download.
+  apart, at two sizes so it stays sharp on a high DPI display. It lives under
+  build/ rather than with the app's own assets: everything in there gets
+  compiled into the executable, and installer artwork has no business adding the
+  best part of a megabyte to every download.
 
 ### Changed
 
-- **Themes moved into the options list.** Theme is one row now, alongside
-  Privacy and Notifications, showing the current theme as its value. The three
-  names open beside the menu instead of taking four rows to themselves. It
-  opens leftward because the menu already sits at the right edge of the window.
-  Its icon is lit like the switched-on rows around it, since there is always a
+- **Themes moved into the options list.** Theme is one row now, next to Privacy
+  and Notifications, showing the current theme as its value. The three names
+  open beside the menu instead of taking up four rows on their own. It opens
+  leftward because the menu already sits at the right edge of the window. I keep
+  its icon lit like the switched-on rows around it, since there is always a
   theme and nothing to switch off.
 
 - **Astro is a light theme now**: white cards on brown, with teal running
-  through the rules and headings rather than only touching the titles. It is
-  the only light theme, which means two things it does not share with the
-  others. The traffic lights are darker, because the green that reads perfectly
-  on near-black is close to invisible on paper and a health colour nobody can
-  read is worse than none. And the neon glow is off, because a glow behind dark
+  through the rules and headings instead of only touching the titles. It is my
+  only light theme, which means two things it does not share with the others.
+  The traffic lights are darker, because the green that reads perfectly on
+  near-black is close to invisible on paper, and a health colour nobody can read
+  is worse than none. And I turned the neon glow off, because a glow behind dark
   text is a smudge rather than a light.
 
-- **Barbie is now called Akbu**, and the theme list reads BOSSx, Astro, Akbu.
-  Anyone who already had the pink one keeps it: the stored name is migrated on
-  load rather than falling back to the default.
+- **Barbie is called Akbu now**, and the list reads BOSSx, Astro, Akbu. If you
+  already had the pink one you keep it: I migrate the stored name on load rather
+  than dropping you back to the default.
 
 ## 0.8.2
 
@@ -128,33 +129,33 @@ the app reads it back from its own assembly at runtime.
   notification area and does not open a window: the tray icon and its readings
   panel are the whole of it until you ask for more.
 
-  It is a logon task rather than the usual Run registry key, and that is not a
+  I used a logon task rather than the usual Run registry key, and that is not a
   stylistic choice. BBSpecs asks for Administrator so it can read temperature
   sensors, and Windows silently refuses to start anything from the Run key that
-  needs elevation. There is no prompt at sign-in; it simply never appears. A
+  needs elevation. There is no prompt at sign-in, it simply never appears. A
   logon task created with the highest privileges runs without a prompt and
   without that failure. Creating one needs Administrator, so the option says
   "Needs full access" instead of failing quietly when BBSpecs is not elevated.
 
-  The window is not hidden but parked far off the desktop, with its taskbar
+  The window is not hidden, it is parked far off the desktop with its taskbar
   button removed through the shell. Hiding it is the obvious approach and it
-  does not work: a webview given a hidden window never initialises, so the
-  window came back completely blank the first time it was opened. Parked
-  off-screen it is a real, paintable window as far as the webview is concerned,
-  and nobody can see it. It is only parked when the tray icon is genuinely
-  there, because a window nobody can see with nothing to bring it back is an
-  app you cannot reach. Launching BBSpecs again while a copy is in the tray
-  brings that copy up rather than reporting that it is already running.
+  does not work: a webview given a hidden window never initialises, so the first
+  time you opened it the window came back completely blank. Parked off-screen it
+  is a real, paintable window as far as the webview is concerned, and nobody can
+  see it. I only park it when the tray icon is genuinely there, because a window
+  you cannot see with nothing to bring it back is an app you cannot reach.
+  Launching BBSpecs again while a copy is in the tray brings that copy up
+  instead of telling you it is already running.
 
   On Linux it is an ordinary autostart entry, and since there is no tray there,
   it starts minimised instead.
 
 ### Changed
 
-- **Astro is darker and properly teal.** The browns drop several steps, and the
-  accent moves from a soft mint to a saturated teal. Both changes pull in the
-  same direction: the panels recede and the readings are the only lit thing
-  left, which is the whole idea of the theme.
+- **Astro is darker and properly teal.** I dropped the browns several steps and
+  moved the accent from a soft mint to a saturated teal. Both changes pull the
+  same way: the panels recede and the readings are the only lit thing left,
+  which is the whole idea of the theme.
 
 - **New menu icons**, drawn from Lucide on a consistent grid: a paintbrush for
   the theme group, a hat and glasses for Privacy, a ringing bell for
@@ -166,22 +167,22 @@ the app reads it back from its own assembly at runtime.
 ### Fixed
 
 - **The tray icon works again.** A left click was doing nothing because the
-  panel was opening and closing itself inside the same instant. The previous
-  version tried to take the keyboard focus so it could close on losing it, but
-  Windows refuses that to a process that does not already own the foreground
-  window, and a click on a tray icon is input to the shell rather than to us,
-  so the call failed exactly when it was needed. It no longer asks for focus at
-  all: while the panel is on screen it watches for a mouse button going down
-  outside its own rectangle, which closes it. It also means the panel can
+  panel was opening and closing itself inside the same instant. My previous
+  attempt took the keyboard focus so it could close on losing it, but Windows
+  refuses that to a process that does not already own the foreground window, and
+  a click on a tray icon is input to the shell rather than to us, so the call
+  failed at exactly the moment it was needed. It does not ask for focus at all
+  now: while the panel is on screen it watches for a mouse button going down
+  outside its own rectangle, and that closes it. Good side effect, the panel can
   appear over what you were doing without stealing what you were typing into.
 
-  Two approaches were tried and thrown away before that one, and both failures
-  are recorded in the source. Polling the mouse on a timer misses most clicks,
-  because a click is usually shorter than the gap between two polls, and the
-  flag Windows offers for "pressed since you last asked" is documented as
-  unreliable when anything else on the machine is polling it too. A low-level
-  mouse hook sees every click however brief, is installed only while the panel
-  is on screen, and passes the click straight through to wherever it was aimed.
+  I tried two other approaches first and threw both away, and I left the reasons
+  in the source. Polling the mouse on a timer misses most clicks, because a
+  click is usually shorter than the gap between two polls, and the flag Windows
+  offers for "pressed since you last asked" is documented as unreliable when
+  anything else on the machine is polling it too. A low-level mouse hook sees
+  every click however brief, is installed only while the panel is on screen, and
+  passes the click straight through to wherever it was aimed.
 
 ### Changed
 
@@ -191,16 +192,16 @@ the app reads it back from its own assembly at runtime.
 
 - **Zoom is off.** The webview inherited a browser's zoom gestures, and this is
   a fixed layout rather than a document: half a step of zoom leaves the pixel
-  typeface blurred and the gauges off their grid, and people found it by
-  accident with ctrl and a scroll wheel while trying to scroll the page. Both
-  ctrl with plus or minus and ctrl with the wheel are ignored.
+  typeface blurred and the gauges off their grid, and people kept finding it by
+  accident with ctrl and a scroll wheel while trying to scroll the page. I
+  ignore both ctrl with plus or minus and ctrl with the wheel.
 
-- **The update box says which version you are running**, closes with an x in
-  the corner rather than a button competing with the action, and offers Retry
-  in every state where asking again could give a different answer.
+- **The update box says which version you are running**, closes with an x in the
+  corner rather than a button competing with the action, and offers Retry in
+  every state where asking again could give a different answer.
 
-- **The theme menu lists names only.** The colour dots beside them were
-  decoration: the word already says which one it is.
+- **The theme menu lists names only.** The colour dots next to them were
+  decoration: the word already tells you which one it is.
 
 ### Added
 
@@ -212,73 +213,73 @@ the app reads it back from its own assembly at runtime.
 
 ### Added
 
-- **A Memory tab.** The slot diagram is the point: every slot on the board
-  drawn at the same size, filled ones showing what is in them and empty ones
-  dashed, so "can I add more, and what do I buy" is answerable at a glance
-  instead of through a trip into the BIOS. A stick running below its rated
-  speed says so, because a mismatched set quietly drags the whole lot down to
-  the slowest module and nothing else on the machine tells you.
+- **A Memory tab.** The slot diagram is the point: every slot on the board drawn
+  at the same size, filled ones showing what is in them and empty ones dashed,
+  so "can I add more, and what do I buy" is answerable at a glance instead of
+  through a trip into the BIOS. A stick running below its rated speed says so,
+  because a mismatched set quietly drags the whole lot down to the slowest
+  module and nothing else on the machine tells you.
 
-- **A Drivers tab.** It reports what is installed and how old it is, and it
-  does not pretend to know whether something newer exists, because nothing on
-  the computer does: Windows Update knows about some drivers, the vendors know
-  about the rest, and there is no way to ask either. Age is rated differently
-  per category for the same reason. A year-old graphics driver is genuinely
-  leaving performance behind; a sound driver Microsoft last touched in 2019 is
-  almost certainly still the newest one there will ever be, and calling it out
-  of date would send people hunting for a file that does not exist. The BIOS is
-  listed alongside, with the warning that a failed firmware update can stop a
-  machine booting.
+- **A Drivers tab.** It reports what is installed and how old it is, and it does
+  not pretend to know whether something newer exists, because nothing on your
+  computer does: Windows Update knows about some drivers, the vendors know about
+  the rest, and there is no way to ask either. I rate age differently per
+  category for the same reason. A year-old graphics driver is genuinely leaving
+  performance behind; a sound driver Microsoft last touched in 2019 is almost
+  certainly still the newest one there will ever be, and calling it out of date
+  would send you hunting for a file that does not exist. The BIOS is listed
+  alongside, with the warning that a failed firmware update can stop a machine
+  booting.
 
 - **A tray icon**, with the readings widget on a left click and a menu on a
-  right click. The widget is drawn directly rather than being a second webview:
-  Photino's extra windows run a nested message loop that would freeze the main
-  window for as long as the panel stayed open, and a browser engine is a heavy
-  way to print six numbers.
+  right click. I draw the widget directly rather than making it a second
+  webview: Photino's extra windows run a nested message loop that would freeze
+  the main window for as long as the panel stayed open, and a browser engine is
+  a heavy way to print six numbers.
 
 - **Desktop notifications**, off by default, for the handful of things worth
-  interrupting someone over: a processor or graphics card hot enough to throttle,
-  a drive near the end of its life, the system volume nearly full, and the
+  interrupting you over: a processor or graphics card hot enough to throttle, a
+  drive near the end of its life, the system volume nearly full, and the
   connection dropping. A reading has to stay bad for five seconds before it
-  counts, nothing repeats inside an hour, and a condition has to clear before
-  it can fire again. A monitor that cries wolf gets muted, and then it is no use
-  on the day something is actually wrong.
+  counts, nothing repeats inside an hour, and a condition has to clear before it
+  can fire again. A monitor that cries wolf gets muted, and then it is no use on
+  the day something is actually wrong.
 
 - **Themes**, in the new menu. BOSSx is unchanged. Barbie keeps the same layout
   and swaps the reds for hot pink, the trim for a lighter pink, and lifts every
-  surface a few steps with a violet cast. The green, yellow and red health
-  colours are deliberately left alone in both: green has to mean fine and red
-  has to mean trouble whatever the paint.
+  surface a few steps with a violet cast. I deliberately left the green, yellow
+  and red health colours alone in both: green has to mean fine and red has to
+  mean trouble whatever the paint.
 
-- **Updating in place.** BBSpecs checks GitHub on startup, and offers Install or
-  Later if there is something newer. Install downloads it, puts it where the
-  running program is, and restarts. The old file is renamed rather than deleted
-  until the next launch has proved the new one works, so a download that fails
-  halfway leaves the working version exactly where it was.
+- **Updating in place.** BBSpecs checks GitHub on startup, and offers you
+  Install or Later if there is something newer. Install downloads it, puts it
+  where the running program is, and restarts. I rename the old file rather than
+  deleting it until the next launch has proved the new one works, so a download
+  that fails halfway leaves your working version exactly where it was.
 
 - **A way out of an unpartitioned disk.** A disk with no volumes, or with a
   chunk of unallocated space going unused, now says so and opens Disk Management
-  (or the desktop's equivalent on Linux). Partitioning is left to the tool that
+  (or your desktop's equivalent on Linux). I leave partitioning to the tool that
   owns it: shipping a way to do it here would mean shipping a way to destroy
   data by accident.
 
-- **Settings that survive a restart.** Theme, privacy and notifications are kept
+- **Settings that survive a restart.** Theme, privacy and notifications live
   beside the app's own data rather than in the page, because a webview loaded
   from a file has an origin that browsers treat as untrustworthy and its storage
   can be cleared without warning.
 
 ### Changed
 
-- **The interface explains itself less.** Fourteen blocks of prose sat under
-  readings that were perfectly fine, in the voice of something teaching a class.
-  An explanation now appears only when a verdict is below good, which is the
-  moment somebody actually wants to know why. The processor glossary folds away
+- **The interface explains itself less.** I had fourteen blocks of prose sitting
+  under readings that were perfectly fine, in the voice of something teaching a
+  class. An explanation only shows up now when a verdict is below good, which is
+  the moment you actually want to know why. The processor glossary folds away
   instead of holding a third of the screen permanently.
 
 - **The Overview is no longer six identical boxes in an even grid.** The
   processor and graphics card get a roomy two-across row because they are what
-  people open this for; memory, storage and the connection are packed tighter
-  below. Card corners are sharper and the drop shadows are gone.
+  you opened this for; memory, storage and the connection are packed tighter
+  below. Card corners are sharper and I dropped the drop shadows.
 
 - **Privacy and the new settings moved into a menu**, so the brand bar is a
   brand bar again.
@@ -286,24 +287,25 @@ the app reads it back from its own assembly at runtime.
 - **Copy Specs and Upgrade ideas are outlined**, not filled. The hover fill is
   unchanged.
 
-- **Tab and label wording.** Drives is now Disks, and a Drivers tab sits beside
-  it. Processor and Graphics say "(CPU)" and "(GPU)" so the acronym and the word
-  are learned together. The wireless verdict says "Wireless" rather than
+- **Tab and label wording.** Drives is Disks now, and a Drivers tab sits beside
+  it. Processor and Graphics say "(CPU)" and "(GPU)" so you learn the acronym
+  and the word together. The wireless verdict says "Wireless" rather than
   "Wireless Connection".
 
-- **Logos cannot be dragged out of the window**, which only ever looked like a bug.
+- **Logos cannot be dragged out of the window**, which only ever looked like a
+  bug.
 
 - **Unallocated space is measured against the partition table**, not against the
   volumes with drive letters. A normal Windows disk keeps an EFI, an MSR and a
-  recovery partition that carry no letter, so counting volumes reported about
-  26 GB going spare on a perfectly healthy 512 GB drive. A disk that cannot be
-  measured properly now says nothing, because a storage tool that invents free
+  recovery partition that carry no letter, so counting volumes had me reporting
+  about 26 GB going spare on a perfectly healthy 512 GB drive. A disk I cannot
+  measure properly now says nothing, because a storage tool that invents free
   space is worse than one that stays quiet.
 
-- **A failed update check says so**, instead of reporting that you are up to
+- **A failed update check says so**, instead of telling you that you are up to
   date. Being unable to reach GitHub and having nothing to install are different
-  answers, and running them together is how somebody ends up several releases
-  behind while being told they are current.
+  answers, and running them together is how you end up several releases behind
+  while being told you are current.
 
 ## 0.7.0
 
